@@ -62,7 +62,7 @@
 
 							Fonitor.Models.Image image = new Fonitor.Models.Image(ms.ToArray(), apiKey, sensorId, DateTime.Now);
 
-							imageRepository.Add(image);
+							imageRepository.AddOrReplace(image);
 						}
 					}
 

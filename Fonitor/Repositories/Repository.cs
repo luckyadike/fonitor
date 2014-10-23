@@ -13,9 +13,9 @@
 			tableReference = tableClient.GetTableReference(tableName);
 		}
 
-		public void Add(T entity)
+		public void AddOrReplace(T entity)
 		{
-			var operation = TableOperation.Insert(entity);
+			var operation = TableOperation.InsertOrReplace(entity);
 
 			tableReference.Execute(operation);
 		}
