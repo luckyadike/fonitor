@@ -41,12 +41,9 @@
 				throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
 			}
 
-			// Consider making this better?
-			var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
-
-			var apiKey = identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).Single();
-
-			var sensorId = identity.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).Single();
+			string apiKey;
+			string sensorId;
+			ExtractRequestIdentity(out apiKey, out sensorId);
 
 			var task = Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).
 				ContinueWith(t =>
@@ -99,6 +96,15 @@
 				});
 
 			return task;
+		}
+
+		private static void ExtractRequestIdentity(out string apiKey, out string sensorId)
+		{
+			var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+			apiKey = identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).Single();
+
+			sensorId = identity.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).Single();
 		}
 
 		public bool SimilarToBaseImage(Stream newImage, string apiKey, string sensorId)
