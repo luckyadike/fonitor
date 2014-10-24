@@ -1,25 +1,27 @@
 ﻿namespace Fonitor.Models
 {
+	using Microsoft.WindowsAzure.Storage.Table;
 	using System;
 
-	public sealed class Image : Entity
+	public sealed class Image : BlobEntity
 	{
 		public Image() { }
 
-		public Image(byte[] blob, string apiKey, string sensorId, DateTime creationTime)
-			: base(apiKey, sensorId)
+		public Image(byte[] blob, string apiKey, string sensorId)
+			: base(blob, apiKey, sensorId)
 		{
 			PartitionKey = apiKey;
 
 			RowKey = sensorId;
-
-			Blob = blob;
-
-			CreationTime = creationTime;
 		}
 
-		public byte[] Blob { get; set; }
-
-		public DateTime CreationTime { get; set; }
+		[IgnorePropertyAttribute]
+		public byte[] Blob
+		{
+			get
+			{
+				return GetData();
+			}
+		}
 	}
 }

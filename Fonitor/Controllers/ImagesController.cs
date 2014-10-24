@@ -2,7 +2,6 @@
 {
 	using Fonitor.Repositories;
 	using Fonitor.Services;
-	using System;
 	using System.Configuration;
 	using System.Drawing;
 	using System.IO;
@@ -58,38 +57,45 @@
 					}
 
 					var provider = t.Result;
+					if (provider.Contents.Count == 0)
+					{
+						return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "The request is empty.");
+					}
+
+					var content = provider.Contents.First();
 
 					string message = string.Empty;
-					foreach (var content in provider.Contents)
+
+					// Incoming image.
+					var stream = content.ReadAsStreamAsync().Result;
+
+					if (stream.Length > Constants.MaxImageSize)
 					{
-						// Incoming image.
-						var stream = content.ReadAsStreamAsync().Result;
+						return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "The image is too large.");
+					}
 
-						if (reset)
+					if (reset)
+					{
+						// Replace the base image.
+						using (var ms = new MemoryStream())
 						{
-							// Replace the base image.
-							using (var ms = new MemoryStream())
-							{
-								stream.CopyTo(ms);
+							stream.CopyTo(ms);
 
-								Fonitor.Models.Image image = new Fonitor.Models.Image(ms.ToArray(), apiKey, sensorId, DateTime.Now);
+							Fonitor.Models.Image image = new Fonitor.Models.Image(ms.ToArray(), apiKey, sensorId);
 
-								imageRepository.AddOrReplace(image);
-							}
+							imageRepository.AddOrReplace(image);
 						}
-						else if (!SimilarToBaseImage(stream, apiKey, sensorId))
-						{
-							// Notify the caller.
-							// For now just add it to the response.
+					}
+					else if (!SimilarToBaseImage(stream, apiKey, sensorId))
+					{
+						// Notify the caller.
+						// For now just add it to the response.
 
-							message = "This image is different.";
-						}
-
-						// There should just be 1 image for request.
-						break;
+						message = "This image is different.";
 					}
 
 					return Request.CreateResponse(HttpStatusCode.OK, message);
+
 				});
 
 			return task;
@@ -102,7 +108,11 @@
 
 			var threshold = int.Parse(ConfigurationManager.AppSettings["MaxImageDivergencePercent"]);
 
-			var diff = ImageComparison.PercentageDifference(Image.FromStream(newImage), Image.FromStream(new MemoryStream(baseImage.Blob))) * 100;
+			var diff = 100.0;
+			if (baseImage != null)
+			{
+				diff = ImageComparison.PercentageDifference(Image.FromStream(newImage), Image.FromStream(new MemoryStream(baseImage.Blob))) * 100;
+			}
 
 			return diff < threshold ? true : false;
 		}
