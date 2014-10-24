@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\fonitor.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -122,13 +123,13 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ImageComparison\ImageComparison.csproj">
-      <Project>{9317de4a-213d-4afc-b58f-ed401204534a}</Project>
-      <Name>ImageComparison</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PhonitorData\PhonitorData.csproj">
+    <ProjectReference Include="..\FonitorData\FonitorData.csproj">
       <Project>{f6cd24f9-e671-4ee3-8c6e-40b73b532634}</Project>
-      <Name>PhonitorData</Name>
+      <Name>FonitorData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImageComparison\ImageComparison.csproj">
+      <Project>{b4f4a3b1-0448-458f-bc46-f022a028ddab}</Project>
+      <Name>ImageComparison</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
