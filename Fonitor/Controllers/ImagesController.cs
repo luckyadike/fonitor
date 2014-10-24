@@ -1,7 +1,7 @@
 ﻿namespace Fonitor.Controllers
 {
-	using Fonitor.Repositories;
-	using Fonitor.Services;
+	using FonitorData.Repositories;
+	using FonitorData.Services;
 	using System.Configuration;
 	using System.Drawing;
 	using System.IO;
@@ -16,14 +16,14 @@
 
 	public class ImagesController : ApiController
 	{
-		private Repository<Fonitor.Models.Image> imageRepository { get; set; }
+		private Repository<FonitorData.Models.Image> imageRepository { get; set; }
 
 		public ImagesController()
 		{
 			imageRepository = new ImageRepository(new TableStorageService());
 		}
 
-		public ImagesController(Repository<Fonitor.Models.Image> repository)
+		public ImagesController(Repository<FonitorData.Models.Image> repository)
 		{
 			imageRepository = repository;
 		}
@@ -78,7 +78,7 @@
 						{
 							stream.CopyTo(ms);
 
-							Fonitor.Models.Image image = new Fonitor.Models.Image(ms.ToArray(), apiKey, sensorId);
+							FonitorData.Models.Image image = new FonitorData.Models.Image(ms.ToArray(), apiKey, sensorId);
 
 							imageRepository.AddOrReplace(image);
 						}

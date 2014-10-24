@@ -1,7 +1,7 @@
-﻿namespace Fonitor.Repositories
+﻿namespace FonitorData.Repositories
 {
-	using Fonitor.Models;
-	using Fonitor.Services;
+	using FonitorData.Models;
+	using FonitorData.Services;
 
 	public class ImageRepository : Repository<Image>
 	{

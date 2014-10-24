@@ -1,7 +1,7 @@
 ﻿namespace Fonitor
 {
-	using Fonitor.Repositories;
-	using Fonitor.Services;
+	using FonitorData.Repositories;
+	using FonitorData.Services;
 	using System.Web.Http;
 
 	public class WebApiApplication : System.Web.HttpApplication

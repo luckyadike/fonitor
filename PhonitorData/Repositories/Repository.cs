@@ -1,6 +1,6 @@
-﻿namespace Fonitor.Repositories
+﻿namespace FonitorData.Repositories
 {
-	using Fonitor.Services;
+	using FonitorData.Services;
 	using Microsoft.WindowsAzure.Storage.Table;
 	using System.Collections.Generic;
 

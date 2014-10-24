@@ -1,4 +1,4 @@
-﻿namespace Fonitor.Models
+﻿namespace FonitorData.Models
 {
 	using Microsoft.WindowsAzure.Storage.Table;
 	using System;

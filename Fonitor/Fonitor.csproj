@@ -107,13 +107,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="IdentityValidationHandler.cs" />
-    <Compile Include="Models\Entity.cs" />
-    <Compile Include="Models\BlobEntity.cs" />
-    <Compile Include="Models\Image.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ImageRepository.cs" />
-    <Compile Include="Repositories\Repository.cs" />
-    <Compile Include="Services\TableStorageService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -131,6 +125,10 @@
     <ProjectReference Include="..\..\ImageComparison\ImageComparison.csproj">
       <Project>{9317de4a-213d-4afc-b58f-ed401204534a}</Project>
       <Name>ImageComparison</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PhonitorData\PhonitorData.csproj">
+      <Project>{f6cd24f9-e671-4ee3-8c6e-40b73b532634}</Project>
+      <Name>PhonitorData</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

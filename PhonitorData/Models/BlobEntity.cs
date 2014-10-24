@@ -1,4 +1,4 @@
-﻿namespace Fonitor.Models
+﻿namespace FonitorData.Models
 {
 	using System;
 	using System.Collections.Generic;
@@ -11,6 +11,8 @@
 	/// </summary>
 	public class BlobEntity : Entity
 	{
+		public static int MaxImageSize = (960 * 1024 * 3) / 4;
+
 		public BlobEntity() { }
 
 		public BlobEntity(byte[] blob, string apiKey, string sensorId)
@@ -71,7 +73,7 @@
 
 		private void SetData(byte[] data)
 		{
-			if (data.Length > Constants.MaxImageSize)
+			if (data.Length > MaxImageSize)
 				return;
 
 			var setters = new Action<byte[]>[]
