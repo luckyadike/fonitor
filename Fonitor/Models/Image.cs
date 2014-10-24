@@ -4,6 +4,8 @@
 
 	public sealed class Image : Entity
 	{
+		public Image() { }
+
 		public Image(byte[] blob, string apiKey, string sensorId, DateTime creationTime)
 			: base(apiKey, sensorId)
 		{

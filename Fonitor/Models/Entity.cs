@@ -5,6 +5,8 @@
 
 	public class Entity : TableEntity
 	{
+		public Entity() { }
+
 		public Entity(string apiKey, string sensorId)
 		{
 			ApiKey = apiKey;

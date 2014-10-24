@@ -8,16 +8,25 @@
 	{
 		public Repository(TableStorageService service, string tableName)
 		{
-			tableClient = service.StorageAccount.CreateCloudTableClient();
+			client = service.StorageAccount.CreateCloudTableClient();
 
-			tableReference = tableClient.GetTableReference(tableName);
+			reference = client.GetTableReference(tableName);
 		}
 
 		public void AddOrReplace(T entity)
 		{
 			var operation = TableOperation.InsertOrReplace(entity);
 
-			tableReference.Execute(operation);
+			reference.Execute(operation);
+		}
+
+		public T Retrieve(string partitionKey, string rowKey)
+		{
+			var operation = TableOperation.Retrieve<T>(partitionKey, rowKey);
+
+			var result = reference.Execute(operation);
+
+			return (T)result.Result;
 		}
 
 		public void Add(List<T> entities)
@@ -29,11 +38,11 @@
 				batchOperation.Insert(entity);
 			}
 
-			tableReference.ExecuteBatch(batchOperation);
+			reference.ExecuteBatch(batchOperation);
 		}
 
-		protected readonly CloudTableClient tableClient;
+		protected readonly CloudTableClient client;
 
-		protected readonly CloudTable tableReference;
+		protected readonly CloudTable reference;
 	}
 }
