@@ -12,7 +12,9 @@
 
 			GlobalConfiguration.Configuration.MessageHandlers.Add(new IdentityValidationHandler());
 
-			TableStorageService.CreateTableIfNotExists(ImageRepository.TableName);
+			TableStorageService.CreateTableIfNotExists(Constants.ImageTableName);
+
+			TableStorageService.CreateTableIfNotExists(Constants.UserTableName);
         }
     }
 }

@@ -3,7 +3,7 @@
 	using Microsoft.WindowsAzure.Storage.Table;
 	using System;
 
-	public class Entity : TableEntity
+	public abstract class Entity : TableEntity
 	{
 		public Entity() { }
 

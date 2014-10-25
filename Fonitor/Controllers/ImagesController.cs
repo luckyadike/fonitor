@@ -20,7 +20,7 @@
 
 		public ImagesController()
 		{
-			imageRepository = new ImageRepository(new TableStorageService());
+			imageRepository = new Repository<FonitorData.Models.Image>(new TableStorageService(), Constants.ImageTableName);
 		}
 
 		public ImagesController(Repository<FonitorData.Models.Image> repository)
@@ -107,7 +107,7 @@
 			sensorId = identity.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).Single();
 		}
 
-		public bool SimilarToBaseImage(Stream newImage, string apiKey, string sensorId)
+		private bool SimilarToBaseImage(Stream newImage, string apiKey, string sensorId)
 		{
 			// Get base image.
 			var baseImage = imageRepository.Retrieve(apiKey, sensorId);

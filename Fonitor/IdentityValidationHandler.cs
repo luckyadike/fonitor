@@ -23,22 +23,16 @@
 		protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
 		{
 			IEnumerable<string> apiKeyValues;
-			if (!request.Headers.TryGetValues("X-ApiKey", out apiKeyValues))
-			{
-				return Response(HttpStatusCode.BadRequest, "ApiKey is missing");
-			}
+			request.Headers.TryGetValues("X-ApiKey", out apiKeyValues);
 
 			IEnumerable<string> sensorIdValues;
-			if (!request.Headers.TryGetValues("X-SensorId", out sensorIdValues))
-			{
-				return Response(HttpStatusCode.BadRequest, "SensorId is missing");
-			}
+			request.Headers.TryGetValues("X-SensorId", out sensorIdValues);
 
 			// Validate?
-			var apiKeyClaim = new Claim(ClaimTypes.Name, apiKeyValues.First());
+			var apiKeyClaim = new Claim(ClaimTypes.Name, apiKeyValues.FirstOrDefault());
 
 			// Validate?
-			var sensorIdClaim = new Claim(ClaimTypes.Sid, sensorIdValues.First());
+			var sensorIdClaim = new Claim(ClaimTypes.Sid, sensorIdValues.FirstOrDefault());
 
 			var identity = new ClaimsIdentity(new[] { apiKeyClaim, sensorIdClaim }, "ApiKey");
 
