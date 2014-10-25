@@ -23,27 +23,19 @@
 		protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
 		{
 			IEnumerable<string> apiKeyValues;
-			request.Headers.TryGetValues("X-ApiKey", out apiKeyValues);
-
 			IEnumerable<string> sensorIdValues;
-			request.Headers.TryGetValues("X-SensorId", out sensorIdValues);
+			if (request.Headers.TryGetValues("X-ApiKey", out apiKeyValues) && request.Headers.TryGetValues("X-SensorId", out sensorIdValues))
+			{
+				var apiKeyClaim = new Claim(ClaimTypes.Name, apiKeyValues.FirstOrDefault());
 
-			// Validate?
-			var apiKeyClaim = new Claim(ClaimTypes.Name, apiKeyValues.FirstOrDefault());
+				var sensorIdClaim = new Claim(ClaimTypes.Sid, sensorIdValues.FirstOrDefault());
 
-			// Validate?
-			var sensorIdClaim = new Claim(ClaimTypes.Sid, sensorIdValues.FirstOrDefault());
+				var identity = new ClaimsIdentity(new[] { apiKeyClaim, sensorIdClaim }, "ApiKey");
 
-			var identity = new ClaimsIdentity(new[] { apiKeyClaim, sensorIdClaim }, "ApiKey");
+				var principal = new ClaimsPrincipal(identity);
 
-			var principal = new ClaimsPrincipal(identity);
-
-			Thread.CurrentPrincipal = principal;
-
-			// Create a better structure to hold this data.
-			//		Load the user sensor settings (retention policy etc.)
-			//		Load the user notification settings (phone, email etc.)
-			//      Consider putting all user data in a single entry?
+				Thread.CurrentPrincipal = principal;
+			}
 
 			return base.SendAsync(request, cancellationToken);
 		}

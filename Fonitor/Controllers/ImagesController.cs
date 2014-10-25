@@ -1,5 +1,6 @@
 ﻿namespace Fonitor.Controllers
 {
+	using Fonitor.Filters;
 	using FonitorData.Repositories;
 	using FonitorData.Services;
 	using System.Configuration;
@@ -34,6 +35,7 @@
 		/// </summary>
 		/// <param name="reset">Indicates if the base image is to be overwritten by the new one.</param>
 		/// <returns>A HttpResponseMessage containing the operation status.</returns>
+		[RequireKeyAttribute]
 		public Task<HttpResponseMessage> Post(bool reset = false)
 		{
 			if (!Request.Content.IsMimeMultipartContent())
@@ -43,7 +45,7 @@
 
 			string apiKey;
 			string sensorId;
-			ExtractRequestIdentity(out apiKey, out sensorId);
+			Constants.ExtractRequestIdentity(out apiKey, out sensorId);
 
 			var task = Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).
 				ContinueWith(t =>
@@ -96,15 +98,6 @@
 				});
 
 			return task;
-		}
-
-		private static void ExtractRequestIdentity(out string apiKey, out string sensorId)
-		{
-			var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
-
-			apiKey = identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).Single();
-
-			sensorId = identity.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).Single();
 		}
 
 		private bool SimilarToBaseImage(Stream newImage, string apiKey, string sensorId)
