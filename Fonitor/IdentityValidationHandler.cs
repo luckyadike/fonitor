@@ -20,6 +20,7 @@
 						};
 					});
 		}
+
 		protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
 		{
 			IEnumerable<string> apiKeyValues;
