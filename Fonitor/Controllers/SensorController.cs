@@ -9,21 +9,36 @@
 	using System.Web.Http;
 	using System.Web.Http.ModelBinding;
 
+    /// <summary>
+    /// Controller for sensor related actions.
+    /// </summary>
 	public class SensorController : ApiController
 	{
 		private Repository<Sensor> sensorRepository { get; set; }
 
+        /// <summary>
+        /// Default Constructor.
+        /// </summary>
 		public SensorController()
 		{
 			sensorRepository = new Repository<Sensor>(new TableStorageService(), Constants.SensorTableName);
 		}
 
+        /// <summary>
+        /// Constructor with repository parameter.
+        /// </summary>
+        /// <param name="repository">The data repository to use.</param>
 		public SensorController(Repository<Sensor> repository)
 		{
 			sensorRepository = repository;
 		}
 
 		// POST api/sensor/register
+        /// <summary>
+        /// Registers a new sensor.
+        /// </summary>
+        /// <param name="sensorModel"></param>
+        /// <returns>A HttpResponseMessage containing the operation status.</returns>
 		[RequireAPIKey]
 		public IHttpActionResult Register(RegisterSensor sensorModel)
 		{

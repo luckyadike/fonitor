@@ -486,9 +486,71 @@
             This is the maximum size allowable for an image.
             </summary>
         </member>
+        <member name="T:Fonitor.Controllers.SensorController">
+            <summary>
+            Controller for sensor related actions.
+            </summary>
+        </member>
+        <member name="M:Fonitor.Controllers.SensorController.#ctor">
+            <summary>
+            Default Constructor.
+            </summary>
+        </member>
+        <member name="M:Fonitor.Controllers.SensorController.#ctor(FonitorData.Repositories.Repository{FonitorData.Models.Sensor})">
+            <summary>
+            Constructor with repository parameter.
+            </summary>
+            <param name="repository">The data repository to use.</param>
+        </member>
+        <member name="M:Fonitor.Controllers.SensorController.Register(FonitorData.ViewModels.RegisterSensor)">
+            <summary>
+            Registers a new sensor.
+            </summary>
+            <param name="sensorModel"></param>
+            <returns>A HttpResponseMessage containing the operation status.</returns>
+        </member>
+        <member name="T:Fonitor.Controllers.UserController">
+            <summary>
+            Controller for use related actions.
+            </summary>
+        </member>
+        <member name="M:Fonitor.Controllers.UserController.#ctor">
+            <summary>
+            Default Constructor.
+            </summary>
+        </member>
+        <member name="M:Fonitor.Controllers.UserController.#ctor(FonitorData.Repositories.Repository{FonitorData.Models.User})">
+            <summary>
+            Constructor with repository parameter.
+            </summary>
+            <param name="repository">The data repository to use.</param>
+        </member>
+        <member name="M:Fonitor.Controllers.UserController.Register(FonitorData.ViewModels.RegisterUser)">
+            <summary>
+            Registers a new user account.
+            </summary>
+            <param name="userModel"></param>
+            <returns>A HttpResponseMessage containing the operation status.</returns>
+        </member>
+        <member name="T:Fonitor.Controllers.ImageController">
+            <summary>
+            Controller for image related actions.
+            </summary>
+        </member>
+        <member name="M:Fonitor.Controllers.ImageController.#ctor">
+            <summary>
+            Default Constructor.
+            </summary>
+        </member>
+        <member name="M:Fonitor.Controllers.ImageController.#ctor(FonitorData.Repositories.Repository{FonitorData.Models.Image})">
+            <summary>
+            Constructor with repository parameter.
+            </summary>
+            <param name="repository">The data repository to use.</param>
+        </member>
         <member name="M:Fonitor.Controllers.ImageController.Upload(System.Boolean)">
             <summary>
-            This entrypoint receives images and processes them.
+            This entrypoint receives images from sensors.
             </summary>
             <param name="reset">Indicates if the base image is to be overwritten by the new one.</param>
             <returns>A HttpResponseMessage containing the operation status.</returns>

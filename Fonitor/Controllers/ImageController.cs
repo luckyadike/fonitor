@@ -13,15 +13,25 @@
 	using System.Web.Http;
 	using XnaFan.ImageComparison;
 
+    /// <summary>
+    /// Controller for image related actions.
+    /// </summary>
 	public class ImageController : ApiController
 	{
 		private Repository<FonitorData.Models.Image> imageRepository { get; set; }
 
+        /// <summary>
+        /// Default Constructor.
+        /// </summary>
 		public ImageController()
 		{
 			imageRepository = new Repository<FonitorData.Models.Image>(new TableStorageService(), Constants.ImageTableName);
 		}
 
+        /// <summary>
+        /// Constructor with repository parameter.
+        /// </summary>
+        /// <param name="repository">The data repository to use.</param>
 		public ImageController(Repository<FonitorData.Models.Image> repository)
 		{
 			imageRepository = repository;
@@ -29,7 +39,7 @@
 
 		// POST api/image/upload
 		/// <summary>
-		/// This entrypoint receives images and processes them.
+		/// This entrypoint receives images from sensors.
 		/// </summary>
 		/// <param name="reset">Indicates if the base image is to be overwritten by the new one.</param>
 		/// <returns>A HttpResponseMessage containing the operation status.</returns>

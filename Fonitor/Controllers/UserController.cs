@@ -9,21 +9,36 @@
 	using System.Linq;
 	using System.Web.Http;
 
+    /// <summary>
+    /// Controller for user related actions.
+    /// </summary>
 	public class UserController : ApiController
 	{
 		private Repository<FonitorData.Models.User> userRepository { get; set; }
 
+        /// <summary>
+        /// Default Constructor.
+        /// </summary>
 		public UserController()
 		{
 			userRepository = new Repository<FonitorData.Models.User>(new TableStorageService(), Constants.UserTableName);
 		}
 
+        /// <summary>
+        /// Constructor with repository parameter.
+        /// </summary>
+        /// <param name="repository">The data repository to use.</param>
 		public UserController(Repository<FonitorData.Models.User> repository)
 		{
 			userRepository = repository;
 		}
 
 		// POST api/user/register
+        /// <summary>
+        /// Registers a new user account.
+        /// </summary>
+        /// <param name="userModel"></param>
+        /// <returns>A HttpResponseMessage containing the operation status.</returns>
 		public IHttpActionResult Register(RegisterUser userModel)
 		{
 			return ModelState.IsValid ? RegisterUser(userModel) : BadRequest(ModelState);
