@@ -35,7 +35,7 @@
 		/// </summary>
 		/// <param name="reset">Indicates if the base image is to be overwritten by the new one.</param>
 		/// <returns>A HttpResponseMessage containing the operation status.</returns>
-		[RequireKeyAttribute]
+		[RequireAPIKeyAndSensorId]
 		public Task<HttpResponseMessage> Post(bool reset = false)
 		{
 			if (!Request.Content.IsMimeMultipartContent())

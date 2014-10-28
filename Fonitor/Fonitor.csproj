@@ -125,7 +125,8 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ImagesController.cs" />
-    <Compile Include="Filters\RequireKeyAttribute.cs" />
+    <Compile Include="Filters\RequireAPIKey.cs" />
+    <Compile Include="Filters\RequireAPIKeyAndSensorId.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -1,5 +1,6 @@
 ﻿namespace Fonitor.Controllers
 {
+	using Fonitor.Filters;
 	using FonitorData.Repositories;
 	using FonitorData.Services;
 	using FonitorData.ViewModels;
@@ -33,6 +34,14 @@
 			return RegisterUser(userModel);
 		}
 
+		// POST api/account/registersensor
+		[HttpPost]
+	    [RequireAPIKey]
+		public IHttpActionResult RegisterSensor(RegisterSensor sensorModel)
+		{
+			return Ok();
+		}
+
 		private IHttpActionResult RegisterUser(RegisterUser userModel)
 		{
 			var guid = Guid.NewGuid();
@@ -53,9 +62,7 @@
 
 				userRepository.Add(user);
 
-				// Return the guid (Api key) to the client.
-
-				return new TextResult(string.Format("Key: {0}", guid.ToString()), Request);
+				return Ok();
 			}
 		}
 	}
