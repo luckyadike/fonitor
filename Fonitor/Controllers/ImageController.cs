@@ -9,34 +9,32 @@
 	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
-	using System.Security.Claims;
-	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Web.Http;
 	using XnaFan.ImageComparison;
 
-	public class ImagesController : ApiController
+	public class ImageController : ApiController
 	{
 		private Repository<FonitorData.Models.Image> imageRepository { get; set; }
 
-		public ImagesController()
+		public ImageController()
 		{
 			imageRepository = new Repository<FonitorData.Models.Image>(new TableStorageService(), Constants.ImageTableName);
 		}
 
-		public ImagesController(Repository<FonitorData.Models.Image> repository)
+		public ImageController(Repository<FonitorData.Models.Image> repository)
 		{
 			imageRepository = repository;
 		}
 
-		// POST api/images
+		// POST api/image/upload
 		/// <summary>
 		/// This entrypoint receives images and processes them.
 		/// </summary>
 		/// <param name="reset">Indicates if the base image is to be overwritten by the new one.</param>
 		/// <returns>A HttpResponseMessage containing the operation status.</returns>
 		[RequireAPIKeyAndSensorId]
-		public Task<HttpResponseMessage> Post(bool reset = false)
+		public Task<HttpResponseMessage> Upload(bool reset = false)
 		{
 			if (!Request.Content.IsMimeMultipartContent())
 			{
@@ -73,7 +71,10 @@
 						return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "The image is too large.");
 					}
 
-					if (reset)
+					// Get base image.
+					var baseImage = imageRepository.Retrieve(apiKey, sensorId);
+
+					if (reset || baseImage == null)
 					{
 						// Replace the base image.
 						using (var ms = new MemoryStream())
@@ -85,7 +86,7 @@
 							imageRepository.AddOrReplace(image);
 						}
 					}
-					else if (!SimilarToBaseImage(stream, apiKey, sensorId))
+					else if (!SimilarToBaseImage(stream, baseImage))
 					{
 						// Notify the caller.
 						// For now just add it to the response.
@@ -100,18 +101,12 @@
 			return task;
 		}
 
-		private bool SimilarToBaseImage(Stream newImage, string apiKey, string sensorId)
+		private bool SimilarToBaseImage(Stream newImage, FonitorData.Models.Image baseImage)
 		{
-			// Get base image.
-			var baseImage = imageRepository.Retrieve(apiKey, sensorId);
-
 			var threshold = int.Parse(ConfigurationManager.AppSettings["MaxImageDivergencePercent"]);
 
 			var diff = 100.0;
-			if (baseImage != null)
-			{
-				diff = ImageComparison.PercentageDifference(Image.FromStream(newImage), Image.FromStream(new MemoryStream(baseImage.Blob))) * 100;
-			}
+			diff = ImageComparison.PercentageDifference(Image.FromStream(newImage), Image.FromStream(new MemoryStream(baseImage.Blob))) * 100;
 
 			return diff < threshold ? true : false;
 		}

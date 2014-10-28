@@ -20,6 +20,18 @@
 			reference.Execute(operation);
 		}
 
+		public void AddMany(List<T> entities)
+		{
+			var batchOperation = new TableBatchOperation();
+
+			foreach (T entity in entities)
+			{
+				batchOperation.Insert(entity);
+			}
+
+			reference.ExecuteBatch(batchOperation);
+		}
+
 		public void AddOrReplace(T entity)
 		{
 			var operation = TableOperation.InsertOrReplace(entity);
@@ -34,6 +46,20 @@
 			var result = reference.Execute(operation);
 
 			return (T)result.Result;
+		}
+
+		public void Remove(string partitionKey, string rowKey)
+		{
+			var deletionCandidate = Retrieve(partitionKey, rowKey);
+
+			if (deletionCandidate != null)
+			{
+				var deleteOperation = TableOperation.Delete(deletionCandidate);
+
+				reference.Execute(deleteOperation);
+			}
+
+			// Consider making noise if the entry is not found?
 		}
 
 		public IEnumerable<T> RetrievePartition(string partitionKey)

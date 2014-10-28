@@ -5,41 +5,28 @@
 	using FonitorData.Services;
 	using FonitorData.ViewModels;
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Http;
 
-	public class AccountController : ApiController
+	public class UserController : ApiController
 	{
 		private Repository<FonitorData.Models.User> userRepository { get; set; }
 
-		public AccountController()
+		public UserController()
 		{
 			userRepository = new Repository<FonitorData.Models.User>(new TableStorageService(), Constants.UserTableName);
 		}
 
-		public AccountController(Repository<FonitorData.Models.User> repository)
+		public UserController(Repository<FonitorData.Models.User> repository)
 		{
 			userRepository = repository;
 		}
 
-		// POST api/account/register
-		[HttpPost]
+		// POST api/user/register
 		public IHttpActionResult Register(RegisterUser userModel)
 		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-
-			return RegisterUser(userModel);
-		}
-
-		// POST api/account/registersensor
-		[HttpPost]
-	    [RequireAPIKey]
-		public IHttpActionResult RegisterSensor(RegisterSensor sensorModel)
-		{
-			return Ok();
+			return ModelState.IsValid ? RegisterUser(userModel) : BadRequest(ModelState);
 		}
 
 		private IHttpActionResult RegisterUser(RegisterUser userModel)
@@ -57,12 +44,15 @@
 			else
 			{
 				// This is a new user.
-				// Add the user.
-				var user = new FonitorData.Models.User(userModel.EmailAddress, guid, password);
+				// Add it!
+				userRepository.Add(new FonitorData.Models.User(userModel.EmailAddress, password, guid));
 
-				userRepository.Add(user);
+				var apiKey = guid.ToString("N").ToUpper();
 
-				return Ok();
+				// Map the user to its key.					
+				userRepository.Add(new FonitorData.Models.User(apiKey, userModel.EmailAddress, Guid.Empty));
+
+				return Ok<string>(apiKey);
 			}
 		}
 	}

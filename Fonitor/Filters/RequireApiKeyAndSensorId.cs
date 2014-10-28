@@ -1,11 +1,27 @@
 ﻿namespace Fonitor.Filters
 {
+	using FonitorData.Models;
+	using FonitorData.Repositories;
+	using FonitorData.Services;
+	using System.Linq;
 	using System.Net;
+	using System.Net.Http;
 	using System.Web.Http.Controllers;
 	using System.Web.Http.Filters;
 
 	public class RequireAPIKeyAndSensorId : AuthorizationFilterAttribute
 	{
+		private Repository<User> userRepository { get; set; }
+
+		private Repository<Sensor> sensorRepository { get; set; }
+
+		public RequireAPIKeyAndSensorId()
+		{
+			userRepository = new Repository<User>(new TableStorageService(), Constants.UserTableName);
+
+			sensorRepository = new Repository<Sensor>(new TableStorageService(), Constants.SensorTableName);
+		}
+
 		public override void OnAuthorization(HttpActionContext actionContext)
 		{
 			var request = actionContext.Request;
@@ -16,12 +32,22 @@
 
 			if (string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(sensorId))
 			{
-				actionContext.Response = new System.Net.Http.HttpResponseMessage(HttpStatusCode.BadRequest);
+				actionContext.Response = new HttpResponseMessage(HttpStatusCode.BadRequest);
 			}
 
-			// Add an extra step to check the store?
-
-			base.OnAuthorization(actionContext);
+			// Is this key registered?
+			if (userRepository.RetrievePartition(apiKey).Any() && sensorRepository.RetrievePartition(sensorId).Any())
+			{
+				base.OnAuthorization(actionContext);
+			}
+			else
+			{
+				actionContext.Response = new HttpResponseMessage
+				{
+					Content = new StringContent("Unknown ApiKey or SensorId"),
+					StatusCode = HttpStatusCode.Unauthorized
+				};
+			}
 		}
 	}
 }

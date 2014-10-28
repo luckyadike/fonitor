@@ -15,6 +15,8 @@
 
 		public static string ImageTableName = "Image";
 
+		public static string SensorTableName = "Sensor";
+
 		public static void ExtractRequestIdentity(out string apiKey, out string sensorId)
 		{
 			var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;

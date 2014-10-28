@@ -69,6 +69,7 @@
     <Compile Include="Models\BlobEntity.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\Image.cs" />
+    <Compile Include="Models\Sensor.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Repository.cs" />

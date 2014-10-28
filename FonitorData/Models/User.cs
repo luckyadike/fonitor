@@ -7,17 +7,18 @@
 	{
 		public User() { }
 
-		public User(string emailAddress, Guid id, string password)
+		public User(string partitionKey, string rowKey, Guid id)
 		{
-			EmailAddress = emailAddress;
+			EmailAddress = partitionKey;
 
-		    EncryptedPassword = password;
+		    EncryptedPassword = rowKey;
 
 			VerificationId = id;
 
-			PartitionKey = emailAddress;
+			//
+			PartitionKey = partitionKey;
 
-			RowKey = password;
+			RowKey = rowKey;
 		}
 
 		public string EmailAddress { get; set; }

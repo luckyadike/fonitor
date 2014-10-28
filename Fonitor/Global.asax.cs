@@ -15,6 +15,8 @@
 			TableStorageService.CreateTableIfNotExists(Constants.ImageTableName);
 
 			TableStorageService.CreateTableIfNotExists(Constants.UserTableName);
+
+			TableStorageService.CreateTableIfNotExists(Constants.SensorTableName);
         }
     }
 }
