@@ -34,7 +34,7 @@
             if (baseImage == null)
             {
                 // Set the base item.
-                repository.AddOrReplace(input, name, baseImg);
+                repository.Add(input, name, baseImg);
             }
             else
             {
@@ -53,7 +53,7 @@
                 }
             }
 
-            repository.AddOrReplace(input, name, Guid.NewGuid().ToString("N"));
+            repository.Add(input, name, Guid.NewGuid().ToString("N"));
         }
     }
 }
