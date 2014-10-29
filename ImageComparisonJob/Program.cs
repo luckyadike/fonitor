@@ -34,7 +34,7 @@
             if (baseImage == null)
             {
                 // Set the base item.
-                repository.AddOrReplace(input, name, baseImg);   
+                repository.AddOrReplace(input, name, baseImg);
             }
             else
             {

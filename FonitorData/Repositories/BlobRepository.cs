@@ -13,6 +13,9 @@
 
         public void Add(Stream entity, string container, string key)
         {
+			// Make sure the stream is at the beginning.
+			entity.Seek(0, SeekOrigin.Begin);
+
             GetReference(container);
 
             var blob = reference.GetBlockBlobReference(key);
@@ -28,6 +31,9 @@
 
         public void AddOrReplace(Stream entity, string container, string key)
         {
+			// Make sure the stream is at the beginning.
+			entity.Seek(0, SeekOrigin.Begin);
+
             GetReference(container);
 
             reference.GetBlockBlobReference(key).UploadFromStream(entity);
