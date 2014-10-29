@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor", "Fonitor\Fonitor.csproj", "{FAC1B2D2-0202-4957-BB4B-F726EA89AE5C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor.Tests", "Fonitor.Tests\Fonitor.Tests.csproj", "{1DF7070F-A95D-424A-A84E-4FA058538C27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FonitorData", "FonitorData\FonitorData.csproj", "{F6CD24F9-E671-4EE3-8C6E-40B73B532634}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor.Data", "FonitorData\Fonitor.Data.csproj", "{F6CD24F9-E671-4EE3-8C6E-40B73B532634}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageComparison", "ImageComparison\ImageComparison.csproj", "{B4F4A3B1-0448-458F-BC46-F022A028DDAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageComparisonJob", "ImageComparisonJob\ImageComparisonJob.csproj", "{9550774D-E843-4F46-B56C-B52BBD1811DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor.Jobs", "ImageComparisonJob\Fonitor.Jobs.csproj", "{9550774D-E843-4F46-B56C-B52BBD1811DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,6 @@
-﻿namespace ImageComparisonJob
+﻿namespace Fonitor.Jobs
 {
-	using FonitorData.Repositories;
+	using Fonitor.Data.Repositories;
 	using Microsoft.Azure.WebJobs;
 	using Microsoft.WindowsAzure.Storage.Blob;
 	using System;
@@ -12,7 +12,7 @@
     public class Program
     {
         private static readonly BlobRepository repository =
-            new BlobRepository(new FonitorData.Services.BlobStorageService());
+            new BlobRepository(new Fonitor.Data.Services.BlobStorageService());
 
         static void Main()
         {

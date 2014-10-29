@@ -491,13 +491,13 @@
             Default Constructor.
             </summary>
         </member>
-        <member name="M:Fonitor.Controllers.SensorController.#ctor(FonitorData.Repositories.TableRepository{FonitorData.Models.Sensor})">
+        <member name="M:Fonitor.Controllers.SensorController.#ctor(Fonitor.Data.Repositories.TableRepository{Fonitor.Data.Models.Sensor})">
             <summary>
             Constructor with repository parameter.
             </summary>
             <param name="repository">The data repository to use.</param>
         </member>
-        <member name="M:Fonitor.Controllers.SensorController.Register(FonitorData.ViewModels.RegisterSensor)">
+        <member name="M:Fonitor.Controllers.SensorController.Register(Fonitor.Data.ViewModels.RegisterSensor)">
             <summary>
             Registers a new sensor.
             </summary>
@@ -514,13 +514,13 @@
             Default Constructor.
             </summary>
         </member>
-        <member name="M:Fonitor.Controllers.UserController.#ctor(FonitorData.Repositories.TableRepository{FonitorData.Models.User})">
+        <member name="M:Fonitor.Controllers.UserController.#ctor(Fonitor.Data.Repositories.TableRepository{Fonitor.Data.Models.User})">
             <summary>
             Constructor with repository parameter.
             </summary>
             <param name="repository">The data repository to use.</param>
         </member>
-        <member name="M:Fonitor.Controllers.UserController.Register(FonitorData.ViewModels.RegisterUser)">
+        <member name="M:Fonitor.Controllers.UserController.Register(Fonitor.Data.ViewModels.RegisterUser)">
             <summary>
             Registers a new user account.
             </summary>
@@ -537,7 +537,7 @@
             Default Constructor.
             </summary>
         </member>
-        <member name="M:Fonitor.Controllers.ImageController.#ctor(FonitorData.Repositories.BlobRepository)">
+        <member name="M:Fonitor.Controllers.ImageController.#ctor(Fonitor.Data.Repositories.BlobRepository)">
             <summary>
             Constructor with repository parameter.
             </summary>

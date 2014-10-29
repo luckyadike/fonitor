@@ -1,4 +1,4 @@
-﻿namespace FonitorData.ViewModels
+﻿namespace Fonitor.Data.ViewModels
 {
 	using System.ComponentModel.DataAnnotations;
 

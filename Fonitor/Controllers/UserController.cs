@@ -1,9 +1,9 @@
 ﻿namespace Fonitor.Controllers
 {
 	using Fonitor.Filters;
-	using FonitorData.Repositories;
-	using FonitorData.Services;
-	using FonitorData.ViewModels;
+	using Fonitor.Data.Repositories;
+	using Fonitor.Data.Services;
+	using Fonitor.Data.ViewModels;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -14,21 +14,21 @@
     /// </summary>
 	public class UserController : ApiController
 	{
-		private TableRepository<FonitorData.Models.User> userRepository { get; set; }
+		private TableRepository<Fonitor.Data.Models.User> userRepository { get; set; }
 
         /// <summary>
         /// Default Constructor.
         /// </summary>
 		public UserController()
 		{
-			userRepository = new TableRepository<FonitorData.Models.User>(new TableStorageService(), Constants.UserTableName);
+			userRepository = new TableRepository<Fonitor.Data.Models.User>(new TableStorageService(), Constants.UserTableName);
 		}
 
         /// <summary>
         /// Constructor with repository parameter.
         /// </summary>
         /// <param name="repository">The data repository to use.</param>
-		public UserController(TableRepository<FonitorData.Models.User> repository)
+		public UserController(TableRepository<Fonitor.Data.Models.User> repository)
 		{
 			userRepository = repository;
 		}
@@ -56,12 +56,12 @@
 			{
 				// This is a new user.
 				// Add it!
-				userRepository.Add(new FonitorData.Models.User(userModel.EmailAddress, password, guid));
+				userRepository.Add(new Fonitor.Data.Models.User(userModel.EmailAddress, password, guid));
 
 				var apiKey = guid.ToString("N");
 
 				// Map the user to its key.					
-				userRepository.Add(new FonitorData.Models.User(apiKey, userModel.EmailAddress, Guid.Empty));
+				userRepository.Add(new Fonitor.Data.Models.User(apiKey, userModel.EmailAddress, Guid.Empty));
 
 				return Ok<string>(apiKey);
 			}

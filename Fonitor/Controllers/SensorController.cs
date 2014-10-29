@@ -1,10 +1,10 @@
 ﻿namespace Fonitor.Controllers
 {
 	using Fonitor.Filters;
-	using FonitorData.Models;
-	using FonitorData.Repositories;
-	using FonitorData.Services;
-	using FonitorData.ViewModels;
+	using Fonitor.Data.Models;
+	using Fonitor.Data.Repositories;
+	using Fonitor.Data.Services;
+	using Fonitor.Data.ViewModels;
 	using System.Linq;
 	using System.Web.Http;
 	using System.Web.Http.ModelBinding;

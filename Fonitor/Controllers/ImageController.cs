@@ -1,8 +1,8 @@
 ﻿namespace Fonitor.Controllers
 {
 	using Fonitor.Filters;
-	using FonitorData.Repositories;
-	using FonitorData.Services;
+	using Fonitor.Data.Repositories;
+	using Fonitor.Data.Services;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;

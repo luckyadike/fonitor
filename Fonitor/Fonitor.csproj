@@ -236,9 +236,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\FonitorData\FonitorData.csproj">
+    <ProjectReference Include="..\FonitorData\Fonitor.Data.csproj">
       <Project>{f6cd24f9-e671-4ee3-8c6e-40b73b532634}</Project>
-      <Name>FonitorData</Name>
+      <Name>Fonitor.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

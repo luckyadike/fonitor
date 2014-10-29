@@ -1,4 +1,4 @@
-﻿namespace FonitorData.Services
+﻿namespace Fonitor.Data.Services
 {
     using Microsoft.WindowsAzure;
     using Microsoft.WindowsAzure.Storage;

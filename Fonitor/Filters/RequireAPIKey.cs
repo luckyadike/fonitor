@@ -1,8 +1,8 @@
 ﻿namespace Fonitor.Filters
 {
-	using FonitorData.Models;
-	using FonitorData.Repositories;
-	using FonitorData.Services;
+	using Fonitor.Data.Models;
+	using Fonitor.Data.Repositories;
+	using Fonitor.Data.Services;
 	using System.Linq;
 	using System.Net;
 	using System.Net.Http;

@@ -1,6 +1,6 @@
-﻿namespace FonitorData.ViewModels
+﻿namespace Fonitor.Data.ViewModels
 {
-	using FonitorData.Models;
+	using Fonitor.Data.Models;
 	using System.ComponentModel.DataAnnotations;
 
 	public class RegisterSensor
