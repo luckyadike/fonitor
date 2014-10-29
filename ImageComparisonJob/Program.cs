@@ -23,7 +23,7 @@
         public static void CompareUploadedImage(
             [BlobTrigger("image/{name}")] Stream input,
             string name,
-            IBinder binder)
+            [Blob("output/ShouldNotBeCreated")] Stream output)
         {
             Console.WriteLine("Triggered");
 
@@ -35,7 +35,7 @@
             if (baseImage == null)
             {
                 // Set the latest item.
-                repository.Add(input, name, recent);   
+                repository.AddOrReplace(input, name, recent);   
             }
             else
             {
@@ -53,9 +53,7 @@
                 }
             }
 
-            // Copy the input to the new location.
-            var output = binder.Bind<Stream>(new BlobAttribute(string.Format("{0}/{1}", name, Guid.NewGuid().ToString("N")), FileAccess.Write));
-            input.CopyTo(output);
+            repository.AddOrReplace(input, name, Guid.NewGuid().ToString("N"));
         }
     }
 }
