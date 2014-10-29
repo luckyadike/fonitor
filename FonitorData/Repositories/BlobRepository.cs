@@ -38,7 +38,7 @@
             GetReference(container);
 
             var blob = reference.GetBlockBlobReference(key);
-            if (blob != null)
+            if (blob.Exists())
             {
                 var result = new MemoryStream();
 
