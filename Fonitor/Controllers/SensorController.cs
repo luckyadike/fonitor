@@ -14,21 +14,21 @@
     /// </summary>
 	public class SensorController : ApiController
 	{
-		private Repository<Sensor> sensorRepository { get; set; }
+		private TableRepository<Sensor> sensorRepository { get; set; }
 
         /// <summary>
         /// Default Constructor.
         /// </summary>
 		public SensorController()
 		{
-			sensorRepository = new Repository<Sensor>(new TableStorageService(), Constants.SensorTableName);
+			sensorRepository = new TableRepository<Sensor>(new TableStorageService(), Constants.SensorTableName);
 		}
 
         /// <summary>
         /// Constructor with repository parameter.
         /// </summary>
         /// <param name="repository">The data repository to use.</param>
-		public SensorController(Repository<Sensor> repository)
+		public SensorController(TableRepository<Sensor> repository)
 		{
 			sensorRepository = repository;
 		}
@@ -40,18 +40,14 @@
         /// <param name="sensorModel"></param>
         /// <returns>A HttpResponseMessage containing the operation status.</returns>
 		[RequireAPIKey]
+        [RequireValidViewModel]
 		public IHttpActionResult Register(RegisterSensor sensorModel)
-		{
-			return ModelState.IsValid ? RegisterSensor(sensorModel) : BadRequest(ModelState);
-		}
-
-		private IHttpActionResult RegisterSensor(RegisterSensor sensorModel)
 		{
 			string apiKey;
 			string sensorId;
 			Constants.ExtractRequestIdentity(out apiKey, out sensorId);
 
-			var uniqueSensorId = Security.SHA1Hash(sensorModel.Id + apiKey);
+			var uniqueSensorId = Security.SHA1Hash(sensorModel.Id + apiKey).ToLower();
 
 			// Check if the sensor exists for the requesting ApiKey.
 			if (sensorRepository.RetrievePartition(uniqueSensorId).Any())

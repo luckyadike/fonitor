@@ -6,7 +6,7 @@
 	public class TableStorageService
 	{
 		private static readonly CloudStorageAccount storageAccount =
-			CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("TableStorageConnectionString"));
+			CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
 		public CloudStorageAccount StorageAccount
 		{

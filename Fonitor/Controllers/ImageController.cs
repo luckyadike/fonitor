@@ -1,38 +1,35 @@
 ﻿namespace Fonitor.Controllers
 {
-	using Fonitor.Filters;
-	using FonitorData.Repositories;
-	using FonitorData.Services;
-	using System.Configuration;
-	using System.Drawing;
-	using System.IO;
-	using System.Linq;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading.Tasks;
-	using System.Web.Http;
-	using XnaFan.ImageComparison;
+    using Fonitor.Filters;
+    using FonitorData.Repositories;
+    using FonitorData.Services;
+    using System;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using System.Web.Http;
 
     /// <summary>
     /// Controller for image related actions.
     /// </summary>
 	public class ImageController : ApiController
 	{
-		private Repository<FonitorData.Models.Image> imageRepository { get; set; }
+		private BlobRepository imageRepository { get; set; }
 
         /// <summary>
         /// Default Constructor.
         /// </summary>
 		public ImageController()
 		{
-			imageRepository = new Repository<FonitorData.Models.Image>(new TableStorageService(), Constants.ImageTableName);
+            imageRepository = new BlobRepository(new BlobStorageService());
 		}
 
         /// <summary>
         /// Constructor with repository parameter.
         /// </summary>
         /// <param name="repository">The data repository to use.</param>
-		public ImageController(Repository<FonitorData.Models.Image> repository)
+		public ImageController(BlobRepository repository)
 		{
 			imageRepository = repository;
 		}
@@ -41,10 +38,9 @@
 		/// <summary>
 		/// This entrypoint receives images from sensors.
 		/// </summary>
-		/// <param name="reset">Indicates if the base image is to be overwritten by the new one.</param>
 		/// <returns>A HttpResponseMessage containing the operation status.</returns>
 		[RequireAPIKeyAndSensorId]
-		public Task<HttpResponseMessage> Upload(bool reset = false)
+		public Task<HttpResponseMessage> Upload()
 		{
 			if (!Request.Content.IsMimeMultipartContent())
 			{
@@ -71,54 +67,13 @@
 
 					var content = provider.Contents.First();
 
-					string message = string.Empty;
+                    imageRepository.Add(content.ReadAsStreamAsync().Result, sensorId, Guid.NewGuid().ToString("N"));
 
-					// Incoming image.
-					var stream = content.ReadAsStreamAsync().Result;
-
-					if (stream.Length > Constants.MaxImageSize)
-					{
-						return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "The image is too large.");
-					}
-
-					// Get base image.
-					var baseImage = imageRepository.Retrieve(apiKey, sensorId);
-
-					if (reset || baseImage == null)
-					{
-						// Replace the base image.
-						using (var ms = new MemoryStream())
-						{
-							stream.CopyTo(ms);
-
-							FonitorData.Models.Image image = new FonitorData.Models.Image(ms.ToArray(), apiKey, sensorId);
-
-							imageRepository.AddOrReplace(image);
-						}
-					}
-					else if (!SimilarToBaseImage(stream, baseImage))
-					{
-						// Notify the caller.
-						// For now just add it to the response.
-
-						message = "This image is different.";
-					}
-
-					return Request.CreateResponse(HttpStatusCode.OK, message);
+					return Request.CreateResponse(HttpStatusCode.OK);
 
 				});
 
 			return task;
-		}
-
-		private bool SimilarToBaseImage(Stream newImage, FonitorData.Models.Image baseImage)
-		{
-			var threshold = int.Parse(ConfigurationManager.AppSettings["MaxImageDivergencePercent"]);
-
-			var diff = 100.0;
-			diff = ImageComparison.PercentageDifference(Image.FromStream(newImage), Image.FromStream(new MemoryStream(baseImage.Blob))) * 100;
-
-			return diff < threshold ? true : false;
 		}
 	}
 }

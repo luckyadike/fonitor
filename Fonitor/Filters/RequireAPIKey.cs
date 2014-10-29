@@ -11,11 +11,11 @@
 
 	public class RequireAPIKey : AuthorizationFilterAttribute
 	{
-		private Repository<User> userRepository { get; set; }
+		private TableRepository<User> userRepository { get; set; }
 
 		public RequireAPIKey()
 		{
-			userRepository = new Repository<User>(new TableStorageService(), Constants.UserTableName);
+			userRepository = new TableRepository<User>(new TableStorageService(), Constants.UserTableName);
 		}
 
 		public override void OnAuthorization(HttpActionContext actionContext)

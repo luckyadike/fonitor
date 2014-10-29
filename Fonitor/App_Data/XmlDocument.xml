@@ -496,7 +496,7 @@
             Default Constructor.
             </summary>
         </member>
-        <member name="M:Fonitor.Controllers.SensorController.#ctor(FonitorData.Repositories.Repository{FonitorData.Models.Sensor})">
+        <member name="M:Fonitor.Controllers.SensorController.#ctor(FonitorData.Repositories.TableRepository{FonitorData.Models.Sensor})">
             <summary>
             Constructor with repository parameter.
             </summary>
@@ -511,7 +511,7 @@
         </member>
         <member name="T:Fonitor.Controllers.UserController">
             <summary>
-            Controller for use related actions.
+            Controller for user related actions.
             </summary>
         </member>
         <member name="M:Fonitor.Controllers.UserController.#ctor">
@@ -519,7 +519,7 @@
             Default Constructor.
             </summary>
         </member>
-        <member name="M:Fonitor.Controllers.UserController.#ctor(FonitorData.Repositories.Repository{FonitorData.Models.User})">
+        <member name="M:Fonitor.Controllers.UserController.#ctor(FonitorData.Repositories.TableRepository{FonitorData.Models.User})">
             <summary>
             Constructor with repository parameter.
             </summary>
@@ -542,17 +542,16 @@
             Default Constructor.
             </summary>
         </member>
-        <member name="M:Fonitor.Controllers.ImageController.#ctor(FonitorData.Repositories.Repository{FonitorData.Models.Image})">
+        <member name="M:Fonitor.Controllers.ImageController.#ctor(FonitorData.Repositories.BlobRepository)">
             <summary>
             Constructor with repository parameter.
             </summary>
             <param name="repository">The data repository to use.</param>
         </member>
-        <member name="M:Fonitor.Controllers.ImageController.Upload(System.Boolean)">
+        <member name="M:Fonitor.Controllers.ImageController.Upload">
             <summary>
             This entrypoint receives images from sensors.
             </summary>
-            <param name="reset">Indicates if the base image is to be overwritten by the new one.</param>
             <returns>A HttpResponseMessage containing the operation status.</returns>
         </member>
     </members>

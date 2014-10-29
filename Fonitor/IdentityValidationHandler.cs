@@ -24,19 +24,27 @@
 		protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
 		{
 			IEnumerable<string> apiKeyValues;
+
 			IEnumerable<string> sensorIdValues;
-			if (request.Headers.TryGetValues("X-ApiKey", out apiKeyValues) && request.Headers.TryGetValues("X-SensorId", out sensorIdValues))
-			{
-				var apiKeyClaim = new Claim(ClaimTypes.Name, apiKeyValues.FirstOrDefault());
 
-				var sensorIdClaim = new Claim(ClaimTypes.Sid, sensorIdValues.FirstOrDefault());
+            var claims = new List<Claim>();
 
-				var identity = new ClaimsIdentity(new[] { apiKeyClaim, sensorIdClaim }, "ApiKey");
+            if (request.Headers.TryGetValues("X-ApiKey", out apiKeyValues))
+            {
+                claims.Add(new Claim(ClaimTypes.Name, apiKeyValues.FirstOrDefault()));
 
-				var principal = new ClaimsPrincipal(identity);
+            }
 
-				Thread.CurrentPrincipal = principal;
-			}
+            if (request.Headers.TryGetValues("X-SensorId", out sensorIdValues))
+            {
+                claims.Add(new Claim(ClaimTypes.Sid, sensorIdValues.FirstOrDefault()));
+            }
+
+            var identity = new ClaimsIdentity(claims, "ApiKey");
+
+            var principal = new ClaimsPrincipal(identity);
+
+            Thread.CurrentPrincipal = principal;
 
 			return base.SendAsync(request, cancellationToken);
 		}

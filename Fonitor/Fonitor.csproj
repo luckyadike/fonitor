@@ -191,6 +191,7 @@
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Filters\RequireAPIKey.cs" />
     <Compile Include="Filters\RequireAPIKeyAndSensorId.cs" />
+    <Compile Include="Filters\RequireValidViewModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

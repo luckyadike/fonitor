@@ -11,15 +11,15 @@
 
 	public class RequireAPIKeyAndSensorId : AuthorizationFilterAttribute
 	{
-		private Repository<User> userRepository { get; set; }
+		private TableRepository<User> userRepository { get; set; }
 
-		private Repository<Sensor> sensorRepository { get; set; }
+		private TableRepository<Sensor> sensorRepository { get; set; }
 
 		public RequireAPIKeyAndSensorId()
 		{
-			userRepository = new Repository<User>(new TableStorageService(), Constants.UserTableName);
+			userRepository = new TableRepository<User>(new TableStorageService(), Constants.UserTableName);
 
-			sensorRepository = new Repository<Sensor>(new TableStorageService(), Constants.SensorTableName);
+			sensorRepository = new TableRepository<Sensor>(new TableStorageService(), Constants.SensorTableName);
 		}
 
 		public override void OnAuthorization(HttpActionContext actionContext)

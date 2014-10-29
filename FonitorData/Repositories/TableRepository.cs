@@ -4,9 +4,9 @@
 	using Microsoft.WindowsAzure.Storage.Table;
 	using System.Collections.Generic;
 
-	public class Repository<T> where T : TableEntity , new()
+	public class TableRepository<T> where T : TableEntity , new()
 	{
-		public Repository(TableStorageService service, string tableName)
+		public TableRepository(TableStorageService service, string tableName)
 		{
 			client = service.StorageAccount.CreateCloudTableClient();
 

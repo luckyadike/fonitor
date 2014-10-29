@@ -17,8 +17,6 @@
 
 			GlobalConfiguration.Configuration.MessageHandlers.Add(new IdentityValidationHandler());
 
-			TableStorageService.CreateTableIfNotExists(Constants.ImageTableName);
-
 			TableStorageService.CreateTableIfNotExists(Constants.UserTableName);
 
 			TableStorageService.CreateTableIfNotExists(Constants.SensorTableName);

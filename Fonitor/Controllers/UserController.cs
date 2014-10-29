@@ -14,21 +14,21 @@
     /// </summary>
 	public class UserController : ApiController
 	{
-		private Repository<FonitorData.Models.User> userRepository { get; set; }
+		private TableRepository<FonitorData.Models.User> userRepository { get; set; }
 
         /// <summary>
         /// Default Constructor.
         /// </summary>
 		public UserController()
 		{
-			userRepository = new Repository<FonitorData.Models.User>(new TableStorageService(), Constants.UserTableName);
+			userRepository = new TableRepository<FonitorData.Models.User>(new TableStorageService(), Constants.UserTableName);
 		}
 
         /// <summary>
         /// Constructor with repository parameter.
         /// </summary>
         /// <param name="repository">The data repository to use.</param>
-		public UserController(Repository<FonitorData.Models.User> repository)
+		public UserController(TableRepository<FonitorData.Models.User> repository)
 		{
 			userRepository = repository;
 		}
@@ -39,12 +39,8 @@
         /// </summary>
         /// <param name="userModel"></param>
         /// <returns>A HttpResponseMessage containing the operation status.</returns>
+        [RequireValidViewModel]
 		public IHttpActionResult Register(RegisterUser userModel)
-		{
-			return ModelState.IsValid ? RegisterUser(userModel) : BadRequest(ModelState);
-		}
-
-		private IHttpActionResult RegisterUser(RegisterUser userModel)
 		{
 			var guid = Guid.NewGuid();
 
@@ -62,7 +58,7 @@
 				// Add it!
 				userRepository.Add(new FonitorData.Models.User(userModel.EmailAddress, password, guid));
 
-				var apiKey = guid.ToString("N").ToUpper();
+				var apiKey = guid.ToString("N");
 
 				// Map the user to its key.					
 				userRepository.Add(new FonitorData.Models.User(apiKey, userModel.EmailAddress, Guid.Empty));
