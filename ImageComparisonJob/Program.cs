@@ -35,32 +35,26 @@
 				return;
 			}
 
-			var sensorContainer = input.Metadata["SensorId"];
+			var id = input.Metadata["SensorId"];
 
 			// Get the input stream.
 			var inputStream = new MemoryStream();
-
 			input.DownloadToStream(inputStream);
 
-			Compare(sensorContainer, inputStream);
+			Console.WriteLine(string.Format("Length {0}", inputStream.Length));
 
-			repository.Add(inputStream, sensorContainer, name);
-        }
+            // Latest key in container name
+            var baseImg = "base";
 
-		private static void Compare(string sensorContainer, MemoryStream inputStream)
-		{
-			// Latest key in container name
-			var baseImgKey = "base";
-
-			var baseImage = repository.Retrieve(sensorContainer, baseImgKey);
-			if (baseImage == null)
-			{
-				// Set the base item.
-				repository.Add(inputStream, sensorContainer, baseImgKey);
-			}
-			else
-			{
-				var threshold = int.Parse(ConfigurationManager.AppSettings["MaxImageDivergencePercent"]);
+            var baseImage = repository.Retrieve(id, baseImg);
+            if (baseImage == null)
+            {
+                // Set the base item.
+				repository.Add(inputStream, id, baseImg);
+            }
+            else
+            {
+                var threshold = int.Parse(ConfigurationManager.AppSettings["MaxImageDivergencePercent"]);
 
 				// Compare this to the new image.
 				if (ImageComparison.PercentageDifference(Image.FromStream(inputStream), Image.FromStream(baseImage)) > threshold)
@@ -73,7 +67,9 @@
 				{
 					Console.WriteLine("Same");
 				}
-			}
-		}
+            }
+
+			repository.Add(inputStream, id, name);
+        }
     }
 }

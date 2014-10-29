@@ -26,12 +26,20 @@
 			var blob = reference.GetBlockBlobReference(key);
 			if (!blob.Exists())
 			{
+				AddMetaData(metadata, blob);
+
+				blob.UploadFromStream(entity);
+			}
+		}
+
+		private static void AddMetaData(IDictionary<string, string> metadata, CloudBlockBlob blob)
+		{
+			if (metadata != null)
+			{
 				foreach (var kv in metadata)
 				{
 					blob.Metadata.Add(kv.Key, kv.Value);
 				}
-
-				blob.UploadFromStream(entity);
 			}
 		}
 
