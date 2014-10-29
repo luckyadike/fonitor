@@ -1,14 +1,15 @@
 ﻿namespace Fonitor.Controllers
 {
-    using Fonitor.Filters;
-    using FonitorData.Repositories;
-    using FonitorData.Services;
-    using System;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-    using System.Web.Http;
+	using Fonitor.Filters;
+	using FonitorData.Repositories;
+	using FonitorData.Services;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Net;
+	using System.Net.Http;
+	using System.Threading.Tasks;
+	using System.Web.Http;
 
     /// <summary>
     /// Controller for image related actions.
@@ -67,7 +68,9 @@
 
 					var content = provider.Contents.First();
 
-                    imageRepository.AddOrReplace(content.ReadAsStreamAsync().Result, Constants.ImageTableName, sensorId);
+					var metadata = new Dictionary<string, string> { { "SensorId", sensorId } };
+
+                    imageRepository.AddWithMetadata(content.ReadAsStreamAsync().Result, Constants.ImageTableName, sensorId, metadata);
 
 					return Request.CreateResponse(HttpStatusCode.OK);
 

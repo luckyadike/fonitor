@@ -1,12 +1,13 @@
 ﻿namespace ImageComparisonJob
 {
-    using FonitorData.Repositories;
-    using Microsoft.Azure.WebJobs;
-    using System;
-    using System.Configuration;
-    using System.Drawing;
-    using System.IO;
-    using XnaFan.ImageComparison;
+	using FonitorData.Repositories;
+	using Microsoft.Azure.WebJobs;
+	using Microsoft.WindowsAzure.Storage.Blob;
+	using System;
+	using System.Configuration;
+	using System.Drawing;
+	using System.IO;
+	using XnaFan.ImageComparison;
 
     public class Program
     {
@@ -21,38 +22,58 @@
         }
 
         public static void CompareUploadedImage(
-            [BlobTrigger("image/{name}")] Stream input,
+            [BlobTrigger("image/{name}")] CloudBlockBlob input,
             string name)
         {
             Console.WriteLine("Triggered");
 
-            // Latest key in container name
-            var baseImg = "base";
+			// Get metadata.
+			if (!input.Metadata.ContainsKey("SensorId"))
+			{
+				Console.WriteLine("SensorId is missing from the metadata.");
 
-            var baseImage = repository.Retrieve(name, baseImg);
-            if (baseImage == null)
-            {
-                // Set the base item.
-                repository.Add(input, name, baseImg);
-            }
-            else
-            {
-                var threshold = int.Parse(ConfigurationManager.AppSettings["MaxImageDivergencePercent"]);
+				return;
+			}
 
-                // Compare this to the new image.
-                if (threshold < ImageComparison.PercentageDifference(Image.FromStream(input), Image.FromStream(baseImage)))
-                {
-                    // Images are different.
-                    // The timestamp at this point can be used to get all the different images.
-                    Console.WriteLine("Different");
-                }
-                else
-                {
-                    Console.WriteLine("Same");
-                }
-            }
+			var sensorContainer = input.Metadata["SensorId"];
 
-            repository.Add(input, name, Guid.NewGuid().ToString("N"));
+			// Get the input stream.
+			var inputStream = new MemoryStream();
+
+			input.DownloadToStream(inputStream);
+
+			Compare(sensorContainer, inputStream);
+
+			repository.Add(inputStream, sensorContainer, name);
         }
+
+		private static void Compare(string sensorContainer, MemoryStream inputStream)
+		{
+			// Latest key in container name
+			var baseImgKey = "base";
+
+			var baseImage = repository.Retrieve(sensorContainer, baseImgKey);
+			if (baseImage == null)
+			{
+				// Set the base item.
+				repository.Add(inputStream, sensorContainer, baseImgKey);
+			}
+			else
+			{
+				var threshold = int.Parse(ConfigurationManager.AppSettings["MaxImageDivergencePercent"]);
+
+				// Compare this to the new image.
+				if (ImageComparison.PercentageDifference(Image.FromStream(inputStream), Image.FromStream(baseImage)) > threshold)
+				{
+					// Images are different.
+					// The timestamp at this point can be used to get all the different images.
+					Console.WriteLine("Different");
+				}
+				else
+				{
+					Console.WriteLine("Same");
+				}
+			}
+		}
     }
 }

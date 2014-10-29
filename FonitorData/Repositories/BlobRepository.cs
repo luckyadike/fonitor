@@ -1,8 +1,9 @@
 ﻿namespace FonitorData.Repositories
 {
-    using FonitorData.Services;
-    using Microsoft.WindowsAzure.Storage.Blob;
-    using System.IO;
+	using FonitorData.Services;
+	using Microsoft.WindowsAzure.Storage.Blob;
+	using System.Collections.Generic;
+	using System.IO;
 
     public class BlobRepository
     {
@@ -13,20 +14,26 @@
 
         public void Add(Stream entity, string container, string key)
         {
+			AddWithMetadata(entity, container, key, null);
+        }
+
+		public void AddWithMetadata(Stream entity, string container, string key, IDictionary<string, string> metadata)
+		{
 			entity.Seek(0, SeekOrigin.Begin);
 
-            GetReference(container);
+			GetReference(container);
 
-            var blob = reference.GetBlockBlobReference(key);
-            if (!blob.Exists())
-            {
-                blob.UploadFromStream(entity);
-            }
-            else
-            {
-                // Raise an exception here.
-            }
-        }
+			var blob = reference.GetBlockBlobReference(key);
+			if (!blob.Exists())
+			{
+				foreach (var kv in metadata)
+				{
+					blob.Metadata.Add(kv.Key, kv.Value);
+				}
+
+				blob.UploadFromStream(entity);
+			}
+		}
 
         public void AddOrReplace(Stream entity, string container, string key)
         {
