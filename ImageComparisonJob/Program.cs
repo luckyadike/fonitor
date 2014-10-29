@@ -22,8 +22,7 @@
 
         public static void CompareUploadedImage(
             [BlobTrigger("image/{name}")] Stream input,
-            string name,
-            [Blob("output/ShouldNotBeCreated")] Stream output)
+            string name)
         {
             Console.WriteLine("Triggered");
 
