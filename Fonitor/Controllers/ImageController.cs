@@ -70,7 +70,7 @@
 
 					var metadata = new Dictionary<string, string> { { "SensorId", sensorId } };
 
-                    imageRepository.AddWithMetadata(content.ReadAsStreamAsync().Result, Constants.ImageTableName, sensorId, metadata);
+                    imageRepository.AddWithMetadata(content.ReadAsStreamAsync().Result, Constants.ImageTableName, Guid.NewGuid().ToString("N"), metadata);
 
 					return Request.CreateResponse(HttpStatusCode.OK);
 
