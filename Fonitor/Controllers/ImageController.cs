@@ -67,7 +67,7 @@
 
 					var content = provider.Contents.First();
 
-                    imageRepository.Add(content.ReadAsStreamAsync().Result, Constants.ImageTableName, sensorId);
+                    imageRepository.AddOrReplace(content.ReadAsStreamAsync().Result, Constants.ImageTableName, sensorId);
 
 					return Request.CreateResponse(HttpStatusCode.OK);
 

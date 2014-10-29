@@ -37,14 +37,17 @@
         {
             GetReference(container);
 
-            Stream result = null;
             var blob = reference.GetBlockBlobReference(key);
             if (blob != null)
             {
+                var result = new MemoryStream();
+
                 blob.DownloadToStream(result);
+
+                return result;
             }
 
-            return result;
+            return null;
         }
 
         private void GetReference(string key)
