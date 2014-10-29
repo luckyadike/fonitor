@@ -25,8 +25,6 @@
             [BlobTrigger("image/{name}")] CloudBlockBlob input,
             string name)
         {
-            Console.WriteLine("Triggered");
-
 			// Get metadata.
 			if (!input.Metadata.ContainsKey("SensorId"))
 			{
@@ -54,11 +52,13 @@
             {
                 var threshold = int.Parse(ConfigurationManager.AppSettings["MaxImageDivergencePercent"]);
 
-				// Compare this to the new image.
-				if (ImageComparison.PercentageDifference(Image.FromStream(inputStream), Image.FromStream(baseImage)) > threshold)
+			    // Compare this to the new image.
+				var diff = ImageComparison.PercentageDifference(Image.FromStream(inputStream), Image.FromStream(baseImage)) * 100;
+				if (diff > threshold)
 				{
 					// Images are different.
 					// The timestamp at this point can be used to get all the different images.
+					// Do something?
 					Console.WriteLine("Different");
 				}
 				else
