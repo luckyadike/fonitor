@@ -1,25 +1,25 @@
 ﻿namespace ImageComparisonJob
 {
-    using FonitorData.Models;
-using Microsoft.Azure.WebJobs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+    using Microsoft.Azure.WebJobs;
+    using System;
+    using System.Configuration;
+    using System.IO;
 
-    // To learn more about Microsoft Azure WebJobs, please see http://go.microsoft.com/fwlink/?LinkID=401557
-    class Program
+    public class Program
     {
         static void Main()
         {
-            JobHost host = new JobHost();
+            var host = new JobHost();
             host.RunAndBlock();
         }
 
-        public static void CompareUploadedImage()
+        public static void CompareUploadedImage(
+            [Blob("image/{name}", FileAccess.Read)] Stream input,
+            string name,
+            IBinder binder)
         {
-
+            var output = binder.Bind<Stream>(new BlobAttribute(string.Format("{0}/{1}", name, Guid.NewGuid().ToString("N")), FileAccess.Write));
+            output = input;
         }
     }
 }

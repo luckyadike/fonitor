@@ -481,11 +481,6 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="F:Fonitor.Constants.MaxImageSize">
-            <summary>
-            This is the maximum size allowable for an image.
-            </summary>
-        </member>
         <member name="T:Fonitor.Controllers.SensorController">
             <summary>
             Controller for sensor related actions.

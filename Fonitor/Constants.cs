@@ -6,16 +6,11 @@
 
 	public class Constants
 	{
-		/// <summary>
-		/// This is the maximum size allowable for an image.
-		/// </summary>
-		public static int MaxImageSize = (960 * 1024 * 3) / 4;
+		public static string UserTableName = "user";
 
-		public static string UserTableName = "User";
+		public static string ImageTableName = "image";
 
-		public static string ImageTableName = "Image";
-
-		public static string SensorTableName = "Sensor";
+		public static string SensorTableName = "sensor";
 
 		public static void ExtractRequestIdentity(out string apiKey, out string sensorId)
 		{
