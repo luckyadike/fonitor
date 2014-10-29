@@ -39,18 +39,16 @@
 
 			// Get the input stream.
 			var inputStream = new MemoryStream();
+
 			input.DownloadToStream(inputStream);
 
-			Console.WriteLine(string.Format("Length {0}", inputStream.Length));
+            var baseImgKey = "base";
 
-            // Latest key in container name
-            var baseImg = "base";
-
-            var baseImage = repository.Retrieve(id, baseImg);
+			var baseImage = repository.Retrieve(id, baseImgKey);
             if (baseImage == null)
             {
                 // Set the base item.
-				repository.Add(inputStream, id, baseImg);
+				repository.Add(inputStream, id, baseImgKey);
             }
             else
             {
