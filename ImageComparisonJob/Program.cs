@@ -28,14 +28,13 @@
             Console.WriteLine("Triggered");
 
             // Latest key in container name
-            var recent = "recent";
+            var baseImg = "base";
 
-            // Retrieve the latest entry in the container.
-            var baseImage = repository.Retrieve(name, recent);
+            var baseImage = repository.Retrieve(name, baseImg);
             if (baseImage == null)
             {
-                // Set the latest item.
-                repository.AddOrReplace(input, name, recent);   
+                // Set the base item.
+                repository.AddOrReplace(input, name, baseImg);   
             }
             else
             {
@@ -45,6 +44,7 @@
                 if (threshold < ImageComparison.PercentageDifference(Image.FromStream(input), Image.FromStream(baseImage)))
                 {
                     // Images are different.
+                    // The timestamp at this point can be used to get all the different images.
                     Console.WriteLine("Different");
                 }
                 else
