@@ -68,7 +68,7 @@
 
 					var content = provider.Contents.First();
 
-					var metadata = new Dictionary<string, string> { { "SensorId", sensorId } };
+					var metadata = new Dictionary<string, string> { { "SensorId", sensorId }, { "ApiKey", apiKey } };
 
                     imageRepository.AddWithMetadata(content.ReadAsStreamAsync().Result, Constants.ImageTableName, Guid.NewGuid().ToString("N"), metadata);
 

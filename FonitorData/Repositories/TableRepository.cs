@@ -69,18 +69,6 @@
 			return reference.ExecuteQuery(query);
 		}
 
-		public void Add(List<T> entities)
-		{
-			var batchOperation = new TableBatchOperation();
-
-			foreach (var entity in entities)
-			{
-				batchOperation.Insert(entity);
-			}
-
-			reference.ExecuteBatch(batchOperation);
-		}
-
 		protected readonly CloudTableClient client;
 
 		protected readonly CloudTable reference;
