@@ -1,20 +1,25 @@
 ﻿namespace Fonitor.Jobs
 {
-	using Fonitor.Data.Models;
-	using Fonitor.Data.Repositories;
-	using Fonitor.Data.Services;
-	using Microsoft.Azure.WebJobs;
-	using Microsoft.WindowsAzure.Storage.Blob;
-	using System;
-	using System.Collections.Generic;
-	using System.Configuration;
-	using System.Drawing;
-	using System.IO;
-	using System.Linq;
-	using XnaFan.ImageComparison;
+    using Fonitor.Data.Models;
+    using Fonitor.Data.Repositories;
+    using Fonitor.Data.Services;
+    using Fonitor.Notification;
+    using Microsoft.Azure.WebJobs;
+    using Microsoft.WindowsAzure.Storage.Blob;
+    using System;
+    using System.Configuration;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using XnaFan.ImageComparison;
 
     public class Program
     {
+        static readonly string ApiKeyString = "ApiKey";
+
+        static readonly string SensorIdString = "SensorId";
+
 		static string UniqueString()
 		{
 			return Guid.NewGuid().ToString("N");
@@ -23,8 +28,11 @@
         static readonly BlobRepository imageRepository =
             new BlobRepository(new BlobStorageService());
 
-		static readonly TableRepository<User> userRepository = 
+		static readonly TableRepository<User> userRepository =
 			new TableRepository<User>(new TableStorageService(), "User");
+
+        static readonly TableRepository<Sensor> sensorRepository =
+            new TableRepository<Sensor>(new TableStorageService(), "Sensor");
 
         static void Main()
         {
@@ -43,21 +51,16 @@
             [BlobTrigger("image/{name}")] CloudBlockBlob input,
             string name)
         {
-			var sensorIdString = "SensorId";
-
 			// Get metadata.
-			if (!input.Metadata.ContainsKey(sensorIdString))
+			if (!input.Metadata.ContainsKey(Program.SensorIdString))
 			{
 				Console.WriteLine("SensorId is missing from the metadata.");
 				return;
 			}
 
-			var id = input.Metadata[sensorIdString];
+            var id = input.Metadata[Program.SensorIdString];
 
-			// Get the input stream.
-			var inputStream = new MemoryStream();
-
-			input.DownloadToStream(inputStream);
+            var inputStream = ExtractStream(input);
 
             var baseImgKey = "base";
 
@@ -84,27 +87,34 @@
 			imageRepository.Add(inputStream, id, name);
         }
 
+        private static MemoryStream ExtractStream(CloudBlockBlob input)
+        {
+            // Get the input stream.
+            var inputStream = new MemoryStream();
+
+            input.DownloadToStream(inputStream);
+            return inputStream;
+        }
+
 		/// <summary>
 		/// Sends notifications.
 		/// </summary>
 		/// <param name="input">The blob representing the event.</param>
 		/// <param name="name">The bound name parameter of the blob.</param>
-		public static void SendNotification(
+		public static async Task SendNotification(
 			[BlobTrigger("notification/{name}")] CloudBlockBlob input,
 			string name)
 		{
-			var apiKeyString = "ApiKey";
-
 			// Get metadata.
-			if (!input.Metadata.ContainsKey(apiKeyString))
+            if (!input.Metadata.ContainsKey(Program.ApiKeyString))
 			{
 				Console.WriteLine("ApiKey is missing from the metadata.");
 				return;
 			}
 
-			var key = input.Metadata[apiKeyString];
+            var key = input.Metadata[Program.ApiKeyString];
 
-			// Get the email address / phone number for the user.
+			// Get the email address for the user.
 			var user = userRepository.RetrievePartition(key);
 			if (user == null || user.Count() == 0)
 			{
@@ -112,9 +122,22 @@
 				return;
 			}
 
-			// Send an email to user.First().EmailAddress
-			// Add phone number to the model and use if here too.
-			Console.WriteLine(string.Format("Hey {0} something has gone wrong!", user.First().EmailAddress));
+            // Consider caching this stream?
+            var inputStream = ExtractStream(input);
+
+            var id = input.Metadata[Program.SensorIdString];
+
+            // Get the sensor details.
+            var sensor = sensorRepository.RetrievePartition(id);
+            if (sensor == null || sensor.Count() == 0)
+            {
+                Console.WriteLine("No data found for the sensor.");
+                return;
+            }
+
+			// Send an email.
+            // Send a text? (Base this on the user's settings)
+            await Email.SendImageChangeNotification(user.First().EmailAddress, sensor.First().Name, inputStream);
 		}
     }
 }

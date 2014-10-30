@@ -89,6 +89,10 @@
     <None Include="Properties\webjob-publish-settings.json" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Fonitor.Notification\Fonitor.Notification.csproj">
+      <Project>{3ca9cbab-4cf8-4a88-bbd9-34e0e5109572}</Project>
+      <Name>Fonitor.Notification</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FonitorData\Fonitor.Data.csproj">
       <Project>{f6cd24f9-e671-4ee3-8c6e-40b73b532634}</Project>
       <Name>Fonitor.Data</Name>
