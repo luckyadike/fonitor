@@ -101,7 +101,7 @@
 		/// </summary>
 		/// <param name="input">The blob representing the event.</param>
 		/// <param name="name">The bound name parameter of the blob.</param>
-		public static async Task SendNotification(
+		public static void SendNotification(
 			[BlobTrigger("notification/{name}")] CloudBlockBlob input,
 			string name)
 		{
@@ -137,7 +137,7 @@
 
 			// Send an email.
             // Send a text? (Base this on the user's settings)
-            await Email.SendImageChangeNotification(user.First().EmailAddress, sensor.First().Name, inputStream);
+            Email.SendImageChangeNotification(user.First().EmailAddress, sensor.First().Name, inputStream);
 		}
     }
 }

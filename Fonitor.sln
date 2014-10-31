@@ -1,19 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor", "Fonitor\Fonitor.csproj", "{FAC1B2D2-0202-4957-BB4B-F726EA89AE5C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor.Tests", "Fonitor.Tests\Fonitor.Tests.csproj", "{1DF7070F-A95D-424A-A84E-4FA058538C27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor.Data", "FonitorData\Fonitor.Data.csproj", "{F6CD24F9-E671-4EE3-8C6E-40B73B532634}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor.Data", "Fonitor.Data\Fonitor.Data.csproj", "{F6CD24F9-E671-4EE3-8C6E-40B73B532634}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageComparison", "ImageComparison\ImageComparison.csproj", "{B4F4A3B1-0448-458F-BC46-F022A028DDAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor.Jobs", "ImageComparisonJob\Fonitor.Jobs.csproj", "{9550774D-E843-4F46-B56C-B52BBD1811DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor.Jobs", "Fonitor.Jobs\Fonitor.Jobs.csproj", "{9550774D-E843-4F46-B56C-B52BBD1811DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor.Notification", "Fonitor.Notification\Fonitor.Notification.csproj", "{3CA9CBAB-4CF8-4A88-BBD9-34E0E5109572}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor.Notification.Tests", "Fonitor.Notification.Tests\Fonitor.Notification.Tests.csproj", "{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +87,16 @@ Global
 		{3CA9CBAB-4CF8-4A88-BBD9-34E0E5109572}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3CA9CBAB-4CF8-4A88-BBD9-34E0E5109572}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3CA9CBAB-4CF8-4A88-BBD9-34E0E5109572}.Release|x86.ActiveCfg = Release|Any CPU
+		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
