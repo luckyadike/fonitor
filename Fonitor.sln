@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor.Jobs", "Fonitor.Job
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor.Notification", "Fonitor.Notification\Fonitor.Notification.csproj", "{3CA9CBAB-4CF8-4A88-BBD9-34E0E5109572}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonitor.Notification.Tests", "Fonitor.Notification.Tests\Fonitor.Notification.Tests.csproj", "{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,16 +85,6 @@ Global
 		{3CA9CBAB-4CF8-4A88-BBD9-34E0E5109572}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3CA9CBAB-4CF8-4A88-BBD9-34E0E5109572}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3CA9CBAB-4CF8-4A88-BBD9-34E0E5109572}.Release|x86.ActiveCfg = Release|Any CPU
-		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{4BFD0462-D6CA-4E65-9EDC-A118D4A901D7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
