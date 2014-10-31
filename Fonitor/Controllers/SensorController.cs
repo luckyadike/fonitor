@@ -58,9 +58,24 @@
 			{
 				// This is a new sensor.
 				// Add it!
-				var sensor = new Sensor(uniqueSensorId, sensorModel.Name, sensorModel.Description, sensorModel.Sensor, sensorModel.HostOS);
+				sensorRepository.Add(new Sensor(uniqueSensorId, apiKey)
+				{
+					Name = sensorModel.Name,
+					Description = sensorModel.Description,
+					Id = sensorModel.Id,
+					HostOS = sensorModel.HostOS,
+					Type = sensorModel.Sensor
+				});
 
-				sensorRepository.Add(sensor);
+				// Also add entry using apiKey as partitionKey
+				sensorRepository.Add(new Sensor(apiKey, uniqueSensorId)
+				{
+					Name = sensorModel.Name,
+					Description = sensorModel.Description,
+					Id = sensorModel.Id,
+					HostOS = sensorModel.HostOS,
+					Type = sensorModel.Sensor
+				});
 
 				return Ok<string>(uniqueSensorId);
 			}

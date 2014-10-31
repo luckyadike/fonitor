@@ -11,6 +11,13 @@
 		[EmailAddress]
 		public string EmailAddress { get; set; }
 
+		/// <summary>
+		/// A valid phone number.
+		/// </summary>
+		[Required]
+		[Phone]
+		public string PhoneNumber { get; set; }
+
         /// <summary>
         /// Account password.
         /// </summary>

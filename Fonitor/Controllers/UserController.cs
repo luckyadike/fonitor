@@ -56,12 +56,24 @@
 			{
 				// This is a new user.
 				// Add it!
-				userRepository.Add(new Fonitor.Data.Models.User(userModel.EmailAddress, password, guid));
+				userRepository.Add(new Fonitor.Data.Models.User(userModel.EmailAddress, password)
+				{
+					VerificationId = guid,
+					EmailAddress = userModel.EmailAddress,
+					EncryptedPassword = password,
+					PhoneNumber = userModel.PhoneNumber
+				});
 
 				var apiKey = guid.ToString("N");
 
-				// Map the user to its key.					
-				userRepository.Add(new Fonitor.Data.Models.User(apiKey, userModel.EmailAddress, Guid.Empty));
+				// Also add entry using apiKey as partitionKey					
+				userRepository.Add(new Fonitor.Data.Models.User(apiKey, password)
+				{
+					VerificationId = guid,
+					EmailAddress = userModel.EmailAddress,
+					EncryptedPassword = password,
+					PhoneNumber = userModel.PhoneNumber
+				});
 
 				return Ok<string>(apiKey);
 			}

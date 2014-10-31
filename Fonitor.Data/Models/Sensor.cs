@@ -23,22 +23,11 @@
 	{
 		public Sensor() { }
 
-		public Sensor(string id, string name, string description, SensorType sensor, DeviceOS os)
+		public Sensor(string partitionKey, string rowKey)
 		{
-			Name = name;
+			PartitionKey = partitionKey;
 
-			Description = description;
-
-			Type = sensor;
-
-			Id = id;
-
-			HostOS = os;
-
-			//
-			PartitionKey = id;
-
-			RowKey = name;
+			RowKey = rowKey;
 		}
 
 		public string Name { get; set; }
