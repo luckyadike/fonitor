@@ -52,7 +52,14 @@
             reference.GetBlockBlobReference(key).UploadFromStream(entity);
         }
 
-        public Stream Retrieve(string container, string key)
+		public CloudBlockBlob RetrieveAsBlob(string container, string key)
+		{
+			GetReference(container);
+
+			return reference.GetBlockBlobReference(key);
+		}
+
+        public Stream RetrieveAsStream(string container, string key)
         {
             GetReference(container);
 

@@ -11,8 +11,7 @@
     using System.Drawing;
     using System.IO;
     using System.Linq;
-    using System.Threading.Tasks;
-    using XnaFan.ImageComparison;
+	using XnaFan.ImageComparison;
 
     public class Program
     {
@@ -36,7 +35,14 @@
 
         static void Main()
         {
-            var host = new JobHost();
+			JobHostConfiguration configuration = new JobHostConfiguration();
+			configuration.Queues.MaxPollingInterval = TimeSpan.FromSeconds(2);
+			configuration.Queues.MaxDequeueCount = 2;
+
+			// Increase this as an optimization.
+			configuration.Queues.BatchSize = 1;
+
+            var host = new JobHost(configuration);
 
             host.RunAndBlock();
         }
@@ -45,74 +51,82 @@
 		/// Compare images added to the container with the base.
 		/// Moves the new images from the generic image container to sensor specific ones.
 		/// </summary>
-		/// <param name="input">The new image.</param>
-		/// <param name="name">The bound name parameter of the image.</param>
-        public static void CompareUploadedImage(
-            [BlobTrigger("image/{name}")] CloudBlockBlob input,
-            string name)
-        {
+		/// <param name="input">A reference to the image.</param>
+		/// <param name="name">A reference to the image in the notifications queue.</param>
+		public static void CompareUploadedImage(
+			[QueueTrigger("image")] string input,
+			[Queue("notification")] out string notification)
+		{
+			notification = null;
+
+			// Get the real image.
+			// Consider caching it?
+			var image = imageRepository.RetrieveAsBlob("image", input);
+			if (image == null)
+			{
+				Console.WriteLine("Could not retrieve image with key {0} from image container.", input);
+				return;
+			}
+
 			// Get metadata.
-			if (!input.Metadata.ContainsKey(Program.SensorIdString))
+			if (!image.Metadata.ContainsKey(Program.SensorIdString))
 			{
 				Console.WriteLine("SensorId is missing from the metadata.");
 				return;
 			}
 
-            var id = input.Metadata[Program.SensorIdString];
+			var sensorId = image.Metadata[Program.SensorIdString];
 
-            var inputStream = ExtractStream(input);
+			var inputStream = ExtractStream(image);
 
-            var baseImgKey = "base";
+			var baseImgKey = "base";
 
-			var baseImage = imageRepository.Retrieve(id, baseImgKey);
-            if (baseImage == null)
-            {
-                // Set the base item.
-				imageRepository.Add(inputStream, id, baseImgKey);
-            }
-            else
-            {
-                var threshold = int.Parse(ConfigurationManager.AppSettings["MaxImageDivergencePercent"]);
+			var baseImage = imageRepository.RetrieveAsStream(sensorId, baseImgKey);
+			if (baseImage == null)
+			{
+				// Set the base item.
+				imageRepository.Add(inputStream, sensorId, baseImgKey);
+			}
+			else
+			{
+				var threshold = int.Parse(ConfigurationManager.AppSettings["MaxImageDivergencePercent"]);
 
-			    // Compare this to the new image.
+				// Compare this to the new image.
 				var diff = ImageComparison.PercentageDifference(Image.FromStream(inputStream), Image.FromStream(baseImage)) * 100;
 				if (diff > threshold)
 				{
 					// Images are different.
-					// Add this image to the notification container.
-					imageRepository.AddWithMetadata(inputStream, "notification", UniqueString(), input.Metadata);
+					// Add this image to the notification queue.
+					notification = input;
 				}
-            }
+			}
 
-			imageRepository.Add(inputStream, id, name);
-        }
-
-        private static MemoryStream ExtractStream(CloudBlockBlob input)
-        {
-            // Get the input stream.
-            var inputStream = new MemoryStream();
-
-            input.DownloadToStream(inputStream);
-            return inputStream;
-        }
+			imageRepository.Add(inputStream, sensorId, UniqueString());
+		}
 
 		/// <summary>
 		/// Sends notifications.
 		/// </summary>
-		/// <param name="input">The blob representing the event.</param>
-		/// <param name="name">The bound name parameter of the blob.</param>
+		/// <param name="input">The queue item representing the event.</param>
 		public static void SendNotification(
-			[BlobTrigger("notification/{name}")] CloudBlockBlob input,
-			string name)
+			[QueueTrigger("notification")] string input)
 		{
+			// Get the real image.
+			var image = imageRepository.RetrieveAsBlob("image", input);
+			if (image == null)
+			{
+				Console.WriteLine("Could not retrieve image with key {0} from image container.", input);
+				return;
+			}
+
 			// Get metadata.
-            if (!input.Metadata.ContainsKey(Program.ApiKeyString))
+			if (!image.Metadata.ContainsKey(Program.ApiKeyString))
 			{
 				Console.WriteLine("ApiKey is missing from the metadata.");
 				return;
 			}
 
-            var key = input.Metadata[Program.ApiKeyString];
+			var key = image.Metadata[Program.ApiKeyString];
 
 			// Get the email address for the user.
 			var user = userRepository.RetrievePartition(key);
@@ -122,22 +136,32 @@
 				return;
 			}
 
-            // Consider caching this stream?
-            var inputStream = ExtractStream(input);
+			// Consider caching this stream?
+			var inputStream = ExtractStream(image);
 
-            var id = input.Metadata[Program.SensorIdString];
+			var sensorId = image.Metadata[Program.SensorIdString];
 
-            // Get the sensor details.
-            var sensor = sensorRepository.RetrievePartition(id);
-            if (sensor == null || sensor.Count() == 0)
-            {
-                Console.WriteLine("No data found for the sensor.");
-                return;
-            }
+			// Get the sensor details.
+			var sensor = sensorRepository.RetrievePartition(sensorId);
+			if (sensor == null || sensor.Count() == 0)
+			{
+				Console.WriteLine("No data found for the sensor.");
+				return;
+			}
 
 			// Send an email.
-            // Send a text? (Base this on the user's settings)
-            Email.SendImageChangeNotification(user.First().EmailAddress, sensor.First().Name, inputStream);
+			// Send a text? (Base this on the user's settings)
+			Email.SendImageChangeNotification(user.First().EmailAddress, sensor.First().Name, inputStream);
 		}
+
+		private static MemoryStream ExtractStream(CloudBlockBlob input)
+		{
+			// Get the input stream.
+			var inputStream = new MemoryStream();
+
+			input.DownloadToStream(inputStream);
+			return inputStream;
+		}
+
     }
 }
