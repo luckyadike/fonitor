@@ -35,7 +35,7 @@
 
         static void Main()
         {
-			JobHostConfiguration configuration = new JobHostConfiguration();
+			var configuration = new JobHostConfiguration();
 			configuration.Queues.MaxPollingInterval = TimeSpan.FromSeconds(2);
 			configuration.Queues.MaxDequeueCount = 2;
 
