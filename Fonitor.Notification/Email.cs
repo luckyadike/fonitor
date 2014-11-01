@@ -5,9 +5,8 @@
     using System.IO;
     using System.Net;
     using System.Net.Mail;
-    using System.Threading.Tasks;
 
-    public class Email
+	public class Email
     {
         public static void SendImageChangeNotification(string recipientAddress,
                                                        string sensorName,
