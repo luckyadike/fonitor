@@ -25,7 +25,11 @@
         /// </summary>
 		public ImageController()
 		{
-            imageBlobRepository = new BlobRepository(new StorageService());
+			var storage = new StorageService();
+
+			imageBlobRepository = new BlobRepository(storage);
+
+			imageQueueRepository = new QueueRepository(storage);
 		}
 
         /// <summary>
