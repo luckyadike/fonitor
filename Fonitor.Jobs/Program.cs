@@ -61,23 +61,25 @@
 
 			// Get the real image.
 			// Consider caching it?
-			var image = imageRepository.RetrieveAsBlob("image", input);
-			if (image == null)
+			var imageBlob = imageRepository.RetrieveAsBlob("image", input);
+			if (!imageBlob.Exists())
 			{
 				Console.WriteLine("Could not retrieve image with key {0} from image container.", input);
 				return;
 			}
 
 			// Get metadata.
-			if (!image.Metadata.ContainsKey(Program.SensorIdString))
+			imageBlob.FetchAttributes();
+
+			if (!imageBlob.Metadata.ContainsKey(Program.SensorIdString))
 			{
 				Console.WriteLine("SensorId is missing from the metadata.");
 				return;
 			}
 
-			var sensorId = image.Metadata[Program.SensorIdString];
+			var sensorId = imageBlob.Metadata[Program.SensorIdString];
 
-			var inputStream = ExtractStream(image);
+			var inputStream = ExtractStream(imageBlob);
 
 			var baseImgKey = "base";
 
@@ -112,21 +114,23 @@
 			[QueueTrigger("notification")] string input)
 		{
 			// Get the real image.
-			var image = imageRepository.RetrieveAsBlob("image", input);
-			if (image == null)
+			var imageBlob = imageRepository.RetrieveAsBlob("image", input);
+			if (!imageBlob.Exists())
 			{
 				Console.WriteLine("Could not retrieve image with key {0} from image container.", input);
 				return;
 			}
 
 			// Get metadata.
-			if (!image.Metadata.ContainsKey(Program.ApiKeyString))
+			imageBlob.FetchAttributes();
+
+			if (!imageBlob.Metadata.ContainsKey(Program.ApiKeyString))
 			{
 				Console.WriteLine("ApiKey is missing from the metadata.");
 				return;
 			}
 
-			var key = image.Metadata[Program.ApiKeyString];
+			var key = imageBlob.Metadata[Program.ApiKeyString];
 
 			// Get the email address for the user.
 			var user = userRepository.RetrievePartition(key);
@@ -137,9 +141,9 @@
 			}
 
 			// Consider caching this stream?
-			var inputStream = ExtractStream(image);
+			var inputStream = ExtractStream(imageBlob);
 
-			var sensorId = image.Metadata[Program.SensorIdString];
+			var sensorId = imageBlob.Metadata[Program.SensorIdString];
 
 			// Get the sensor details.
 			var sensor = sensorRepository.RetrievePartition(sensorId);
