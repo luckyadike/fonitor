@@ -33,6 +33,8 @@
 
             if (changedImageStream != null)
             {
+				changedImageStream.Seek(0, SeekOrigin.Begin);
+
                 message.AddAttachment(changedImageStream, "Picture.jpg");
             }
 
