@@ -16,14 +16,16 @@
     /// </summary>
 	public class ImageController : ApiController
 	{
-		private BlobRepository imageRepository { get; set; }
+		private BlobRepository imageBlobRepository { get; set; }
+
+		private QueueRepository imageQueueRepository { get; set; }
 
         /// <summary>
         /// Default Constructor.
         /// </summary>
 		public ImageController()
 		{
-            imageRepository = new BlobRepository(new BlobStorageService());
+            imageBlobRepository = new BlobRepository(new StorageService());
 		}
 
         /// <summary>
@@ -32,7 +34,7 @@
         /// <param name="repository">The data repository to use.</param>
 		public ImageController(BlobRepository repository)
 		{
-			imageRepository = repository;
+			imageBlobRepository = repository;
 		}
 
 		// POST api/image/upload
@@ -70,7 +72,13 @@
 
 					var metadata = new Dictionary<string, string> { { "SensorId", sensorId }, { "ApiKey", apiKey } };
 
-                    imageRepository.AddWithMetadata(content.ReadAsStreamAsync().Result, Constants.ImageTableName, Guid.NewGuid().ToString("N"), metadata);
+					var imageKey = Guid.NewGuid().ToString("N");
+
+					// Add the image to the image container.
+                    imageBlobRepository.AddWithMetadata(content.ReadAsStreamAsync().Result, Constants.ImageTableName, imageKey, metadata);
+
+					// Also add it to the queue.
+					imageQueueRepository.Enqueue(Constants.ImageTableName, imageKey);
 
 					return Request.CreateResponse(HttpStatusCode.OK);
 

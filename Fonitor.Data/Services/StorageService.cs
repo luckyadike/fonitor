@@ -3,9 +3,9 @@
     using Microsoft.WindowsAzure;
     using Microsoft.WindowsAzure.Storage;
 
-    public class BlobStorageService
+    public class StorageService
     {
-        private static readonly CloudStorageAccount storageAccount =
+        protected static readonly CloudStorageAccount storageAccount =
             CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
         public CloudStorageAccount StorageAccount

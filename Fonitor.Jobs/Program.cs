@@ -26,7 +26,7 @@
 		}
 
         static readonly BlobRepository imageRepository =
-            new BlobRepository(new BlobStorageService());
+            new BlobRepository(new StorageService());
 
 		static readonly TableRepository<User> userRepository =
 			new TableRepository<User>(new TableStorageService(), "User");

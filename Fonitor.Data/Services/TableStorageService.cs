@@ -3,19 +3,8 @@
 	using Microsoft.WindowsAzure;
 	using Microsoft.WindowsAzure.Storage;
 
-	public class TableStorageService
+	public class TableStorageService : StorageService
 	{
-		private static readonly CloudStorageAccount storageAccount =
-			CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
-
-		public CloudStorageAccount StorageAccount
-		{
-			get
-			{
-				return storageAccount;
-			}
-		}
-
 		public static void CreateTableIfNotExists(string tableName)
 		{
 			var tableClient = storageAccount.CreateCloudTableClient();

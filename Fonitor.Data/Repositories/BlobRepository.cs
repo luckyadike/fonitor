@@ -7,7 +7,7 @@
 
     public class BlobRepository
     {
-        public BlobRepository(BlobStorageService service)
+        public BlobRepository(StorageService service)
 		{
 			client = service.StorageAccount.CreateCloudBlobClient();
 		}
