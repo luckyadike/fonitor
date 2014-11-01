@@ -5,11 +5,9 @@
     using Fonitor.Data.Services;
     using Fonitor.Notification;
     using Microsoft.Azure.WebJobs;
-    using Microsoft.WindowsAzure.Storage.Blob;
     using System;
     using System.Configuration;
     using System.Drawing;
-    using System.IO;
     using System.Linq;
 	using XnaFan.ImageComparison;
 
@@ -52,7 +50,7 @@
 		/// Moves the new images from the generic image container to sensor specific ones.
 		/// </summary>
 		/// <param name="input">A reference to the image.</param>
-		/// <param name="name">A reference to the image in the notifications queue.</param>
+        /// <param name="notification">A reference to the image in the notifications queue.</param>
 		public static void CompareUploadedImage(
 			[QueueTrigger("image")] string input,
 			[Queue("notification")] out string notification)
@@ -79,7 +77,7 @@
 
 			var sensorId = imageBlob.Metadata[Program.SensorIdString];
 
-			var inputStream = ExtractStream(imageBlob);
+			var inputStream = imageBlob.ExtractStream();
 
 			var baseImgKey = "base";
 
@@ -141,7 +139,7 @@
 			}
 
 			// Consider caching this stream?
-			var inputStream = ExtractStream(imageBlob);
+            var inputStream = imageBlob.ExtractStream();
 
 			var sensorId = imageBlob.Metadata[Program.SensorIdString];
 
@@ -157,15 +155,5 @@
 			// Send a text? (Base this on the user's settings)
 			Email.SendImageChangeNotification(user.First().EmailAddress, sensor.First().Name, inputStream);
 		}
-
-		private static MemoryStream ExtractStream(CloudBlockBlob input)
-		{
-			// Get the input stream.
-			var inputStream = new MemoryStream();
-
-			input.DownloadToStream(inputStream);
-			return inputStream;
-		}
-
     }
 }
