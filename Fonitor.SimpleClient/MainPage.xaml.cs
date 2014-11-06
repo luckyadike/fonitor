@@ -1,27 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
+﻿// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
 namespace Fonitor.SimpleClient
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Windows.Devices.Enumeration;
+    using Windows.Media.Capture;
+    using Windows.Media.MediaProperties;
+    using Windows.Storage.Streams;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Navigation;
+    using Windows.Web.Http;
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        MediaCapture captureManager;
+        DeviceInformationCollection devices;
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -34,15 +35,81 @@ namespace Fonitor.SimpleClient
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            // TODO: Prepare page for display here.
+            devices = await DeviceInformation.FindAllAsync(DeviceClass.VideoCapture);
+            captureManager = new MediaCapture();
 
-            // TODO: If your application contains multiple pages, ensure that you are
-            // handling the hardware Back button by registering for the
-            // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
-            // If you are using the NavigationHelper provided by some templates,
-            // this event is handled for you.
+            if (devices.Count > 0)
+            {
+                await captureManager.InitializeAsync(new MediaCaptureInitializationSettings
+                {
+                    VideoDeviceId = devices.ElementAt(1).Id,
+                    PhotoCaptureSource = PhotoCaptureSource.VideoPreview
+                });
+
+                SetResolution();
+            }
+        }
+
+        private async void SetResolution()
+        {
+            IReadOnlyList<IMediaEncodingProperties> resolution;
+            resolution = captureManager.VideoDeviceController.GetAvailableMediaStreamProperties(MediaStreamType.VideoPreview);
+
+            uint maxResolution = 0;
+            int indexMaxResolution = 0;
+
+            if (resolution.Count >= 1)
+            {
+                for (int i = 0; i < resolution.Count; i++)
+                {
+                    VideoEncodingProperties props = resolution[i] as VideoEncodingProperties;
+
+                    if (props.Width > maxResolution)
+                    {
+                        indexMaxResolution = i;
+                        maxResolution = props.Width;
+                    }
+                }
+
+                await captureManager.VideoDeviceController.SetMediaStreamPropertiesAsync(MediaStreamType.VideoPreview, resolution[indexMaxResolution]);
+            }
+        }
+
+        private async void startSensorClick_Click(object sender, RoutedEventArgs e)
+        {
+            var encodingProperties = ImageEncodingProperties.CreateJpeg();
+
+            using (var imageStream = new InMemoryRandomAccessStream())
+            {
+                await captureManager.CapturePhotoToStreamAsync(encodingProperties, imageStream);
+
+                await UploadAsync(imageStream);
+            }
+        }
+
+        private async Task UploadAsync(IRandomAccessStream stream)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("X-ApiKey", apiKey.Text.Trim());
+                client.DefaultRequestHeaders.Add("X-SensorId", sensorId.Text.Trim());
+
+                var endpoint = new Uri("https://fonitor.azurewebsites.net/api/image/upload");
+
+                if (stream != null)
+                {
+                    stream.Seek(0);
+
+                    var content = new HttpMultipartFormDataContent();
+
+                    content.Add(new HttpStreamContent(stream));
+
+                    var response = await client.PostAsync(endpoint, content);
+                }
+
+            }
         }
     }
 }
