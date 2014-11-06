@@ -1,0 +1,69 @@
+﻿<Page
+    x:Class="Fonitor.SimpleClient.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Fonitor.SimpleClient"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Margin="10">
+                <TextBlock HorizontalAlignment="Left"
+                           FontSize="25"
+                           Text="Add User"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left">
+                <TextBox x:Name="EmailId" Height="40" Margin="10,0" Width="300" PlaceholderText="Email"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left">
+                <PasswordBox x:Name="Password" Height="40" Margin="10" Width="300" PlaceholderText="Password"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Margin="10,0">
+                <Button x:Name="AddUserClick" Width="100" Content="Submit"></Button>
+            </StackPanel>
+            <StackPanel Margin="10,40,10,0">
+                <TextBlock HorizontalAlignment="Left"
+                           FontSize="25"
+                           Text="Add Sensor"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left">
+                <ComboBox HorizontalAlignment="Left" Margin="10,0" VerticalAlignment="Top" Width="300">
+                    <ComboBoxItem Tag="FrontCamera" IsSelected="True">Front Camera</ComboBoxItem>
+                    <ComboBoxItem Tag="RearCamera">Rear Camera</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left">
+                <TextBox x:Name="SensorName" Height="40" Margin="10,0" Width="300" PlaceholderText="Name"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Margin="10,0">
+                <Button x:Name="registerSensorClick" Width="100" Content="Submit" ></Button>
+            </StackPanel>
+            <StackPanel Margin="10,40,10,0">
+                <TextBlock HorizontalAlignment="Left"
+                           FontSize="25"
+                           Text="Settings"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left">
+                <TextBox x:Name="CaptureFrequency" Height="40" Margin="10,10,0,0" Width="300" PlaceholderText="Frequency (secs)"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Margin="10,0">
+                <Button x:Name="StartSensorClick" Margin="0,5" Width="145" Content="Start"></Button>
+                <Button x:Name="StopSensorClick" Margin="5" Width="150" Content="Stop"></Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>
