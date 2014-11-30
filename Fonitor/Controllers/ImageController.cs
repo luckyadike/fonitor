@@ -16,7 +16,7 @@
     /// </summary>
 	public class ImageController : ApiController
 	{
-		private BlobRepository imageBlobRepository { get; set; }
+		private IBlobRepository imageBlobRepository { get; set; }
 
 		private QueueRepository imageQueueRepository { get; set; }
 
@@ -36,7 +36,7 @@
         /// Constructor with repository parameter.
         /// </summary>
         /// <param name="blobRepository">The data repository to use.</param>
-		public ImageController(BlobRepository blobRepository, QueueRepository queueRepository)
+		public ImageController(IBlobRepository blobRepository, QueueRepository queueRepository)
 		{
 			imageBlobRepository = blobRepository;
 
