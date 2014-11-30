@@ -64,7 +64,7 @@ namespace Fonitor.SimpleClient
             {
                 for (int i = 0; i < resolution.Count; i++)
                 {
-                    VideoEncodingProperties props = resolution[i] as VideoEncodingProperties;
+                    var props = resolution[i] as VideoEncodingProperties;
 
                     if (props.Width > maxResolution)
                     {
@@ -94,6 +94,7 @@ namespace Fonitor.SimpleClient
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("X-ApiKey", apiKey.Text.Trim());
+
                 client.DefaultRequestHeaders.Add("X-SensorId", sensorId.Text.Trim());
 
                 var endpoint = new Uri("https://fonitor.azurewebsites.net/api/image/upload");
@@ -107,6 +108,9 @@ namespace Fonitor.SimpleClient
                     content.Add(new HttpStreamContent(stream));
 
                     var response = await client.PostAsync(endpoint, content);
+
+                    apiKey.Text = response.ReasonPhrase;
+                    sensorId.Text = response.Source.ToString();
                 }
 
             }
