@@ -4,7 +4,8 @@
 	using Microsoft.WindowsAzure.Storage.Table;
 	using System.Collections.Generic;
 
-	public class TableRepository<T> where T : TableEntity , new()
+    public class TableRepository<T> : ITableRepository<T>
+        where T : TableEntity, new()
 	{
 		public TableRepository(TableStorageService service, string tableName)
 		{

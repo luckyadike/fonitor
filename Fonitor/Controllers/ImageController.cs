@@ -18,7 +18,7 @@
 	{
 		private IBlobRepository imageBlobRepository { get; set; }
 
-		private QueueRepository imageQueueRepository { get; set; }
+		private IQueueRepository imageQueueRepository { get; set; }
 
         /// <summary>
         /// Default Constructor.
@@ -36,7 +36,7 @@
         /// Constructor with repository parameter.
         /// </summary>
         /// <param name="blobRepository">The data repository to use.</param>
-		public ImageController(IBlobRepository blobRepository, QueueRepository queueRepository)
+		public ImageController(IBlobRepository blobRepository, IQueueRepository queueRepository)
 		{
 			imageBlobRepository = blobRepository;
 

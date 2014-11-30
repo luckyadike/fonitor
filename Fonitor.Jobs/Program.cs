@@ -28,10 +28,10 @@
         static readonly BlobRepository imageRepository =
             new BlobRepository(new StorageService());
 
-		static readonly TableRepository<User> userRepository =
+		static readonly ITableRepository<User> userRepository =
 			new TableRepository<User>(new TableStorageService(), "User");
 
-        static readonly TableRepository<Sensor> sensorRepository =
+        static readonly ITableRepository<Sensor> sensorRepository =
             new TableRepository<Sensor>(new TableStorageService(), "Sensor");
 
         static void Main()

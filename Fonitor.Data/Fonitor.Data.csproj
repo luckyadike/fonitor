@@ -75,6 +75,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BlobRepository.cs" />
     <Compile Include="Repositories\IBlobRepository.cs" />
+    <Compile Include="Repositories\IQueueRepository.cs" />
+    <Compile Include="Repositories\ITableRepository.cs" />
     <Compile Include="Repositories\QueueRepository.cs" />
     <Compile Include="Repositories\TableRepository.cs" />
     <Compile Include="Services\StorageService.cs" />
