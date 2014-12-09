@@ -111,9 +111,6 @@
 
             // Move this image to a sensor specific table.
 			imageRepository.Add(inputStream, sensorId, input);
-            
-            // Delete the image from the global image repo.
-            imageBlob.Delete(DeleteSnapshotsOption.None);
 		}
 
 		/// <summary>
