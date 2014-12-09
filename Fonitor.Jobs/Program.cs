@@ -1,5 +1,6 @@
 ﻿namespace Fonitor.Jobs
 {
+    using Fonitor.Data;
     using Fonitor.Data.Models;
     using Fonitor.Data.Repositories;
     using Fonitor.Data.Services;
