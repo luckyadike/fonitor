@@ -41,7 +41,7 @@
                 <Button x:Name="startSensorClick" Margin="0,5" Width="145" Content="Start" Click="startSensorClick_Click"></Button>
                 <Button x:Name="stopSensorClick" Margin="5" Width="150" Content="Stop" Click="stopSensorClick_Click"></Button>
             </StackPanel>
-            <Button x:Name="resetSensorClick" HorizontalAlignment="Center" Margin="10" Width="300" Content="Reset" Click="stopSensorClick_Click"></Button>
+            <Button x:Name="resetSensorClick" HorizontalAlignment="Center" Margin="10" Width="300" Content="Reset" Click="resetSensorClick_Click"></Button>
         </StackPanel>
     </Grid>
 </Page>
