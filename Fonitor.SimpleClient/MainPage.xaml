@@ -16,19 +16,18 @@
                            Text="Settings"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center">
-                <TextBox x:Name="apiKey" Height="40" Margin="10,0" Width="350" PlaceholderText="ApiKey"/>
+                        HorizontalAlignment="Left">
+                <TextBox x:Name="apiKey" Height="40" Margin="10,0" Width="300" PlaceholderText="ApiKey"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center">
-                <TextBox x:Name="sensorId" Height="40" Margin="10" Width="350" PlaceholderText="SensorId"/>
+                        HorizontalAlignment="Left">
+                <TextBox x:Name="sensorId" Height="40" Margin="10" Width="300" PlaceholderText="SensorId"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center"
-                        Margin="10,30,10,0">
-                <ComboBox x:Name="periodComboBox" Width="300">
-                    <ComboBoxItem Tag="Default" IsSelected="True">Select frequency</ComboBoxItem>
-                    <ComboBoxItem Tag="OneSecond">1</ComboBoxItem>
+                        HorizontalAlignment="Left"
+                        Margin="10,0">
+                <ComboBox Width="300">
+                    <ComboBoxItem Tag="OneSecond" IsSelected="True">1</ComboBoxItem>
                     <ComboBoxItem Tag="TwoSeconds">2</ComboBoxItem>
                     <ComboBoxItem Tag="FiveSeconds">5</ComboBoxItem>
                     <ComboBoxItem Tag="TenSeconds">10</ComboBoxItem>
@@ -36,12 +35,11 @@
                 </ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center"
+                        HorizontalAlignment="Left"
                         Margin="10,0">
                 <Button x:Name="startSensorClick" Margin="0,5" Width="145" Content="Start" Click="startSensorClick_Click"></Button>
-                <Button x:Name="stopSensorClick" Margin="5" Width="150" Content="Stop" Click="stopSensorClick_Click"></Button>
+                <Button x:Name="stopSensorClick" Margin="5" Width="150" Content="Stop"></Button>
             </StackPanel>
-            <Button x:Name="resetSensorClick" HorizontalAlignment="Center" Margin="10" Width="300" Content="Reset" Click="stopSensorClick_Click"></Button>
         </StackPanel>
     </Grid>
 </Page>

@@ -41,11 +41,6 @@
             reference.GetBlockBlobReference(key).UploadFromStream(entity);
         }
 
-        public void Delete(string container, string key)
-        {
-            RetrieveAsBlob(container, key).DeleteIfExists();
-        }
-
 		public CloudBlockBlob RetrieveAsBlob(string container, string key)
 		{
 			GetContainerReference(container);
