@@ -32,7 +32,6 @@
             if (request.Headers.TryGetValues("X-ApiKey", out apiKeyValues))
             {
                 claims.Add(new Claim(ClaimTypes.Name, apiKeyValues.FirstOrDefault()));
-
             }
 
             if (request.Headers.TryGetValues("X-SensorId", out sensorIdValues))
