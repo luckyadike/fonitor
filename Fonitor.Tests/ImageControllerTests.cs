@@ -69,15 +69,11 @@
 
             Controller.Request.Content = multipartContent;
 
-            Assert.IsTrue(BlobRepository.Count() == 0);
-
-            Assert.IsTrue(QueueRepository.Count() == 0);
+            Assert.IsTrue(BlobRepository.Count() == 0 && QueueRepository.Count() == 0);
 
             await Controller.Upload();
 
-            Assert.IsTrue(BlobRepository.Count() == 1);
-
-            Assert.IsTrue(QueueRepository.Count() == 1);
+            Assert.IsTrue(BlobRepository.Count() == 1 && QueueRepository.Count() == 1);
         }
 	}
 }
