@@ -17,11 +17,11 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
-                <TextBox x:Name="apiKey" Height="40" Margin="10,0" Width="350" PlaceholderText="ApiKey"/>
+                <TextBox x:Name="apiKey" Height="40" Margin="10,0" Width="350" PlaceholderText="ApiKey" Text="454c906e5bee48f1a162677f11b725a8"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
-                <TextBox x:Name="sensorId" Height="40" Margin="10" Width="350" PlaceholderText="SensorId"/>
+                <TextBox x:Name="sensorId" Height="40" Margin="10" Width="350" PlaceholderText="SensorId" Text="f5d7c8abb45ba98d45bde0b6e3e46b82ce96fefe"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center"
