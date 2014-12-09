@@ -35,12 +35,10 @@
         /// <summary>
         /// Constructor with repository parameter.
         /// </summary>
-        /// <param name="blobRepository">The data repository to use.</param>
-		public ImageController(BlobRepository blobRepository, QueueRepository queueRepository)
+        /// <param name="repository">The data repository to use.</param>
+		public ImageController(BlobRepository repository)
 		{
-			imageBlobRepository = blobRepository;
-
-            imageQueueRepository = queueRepository;
+			imageBlobRepository = repository;
 		}
 
 		// POST api/image/upload
