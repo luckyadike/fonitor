@@ -5,7 +5,7 @@
 	using System.Collections.Generic;
 	using System.IO;
 
-    public class BlobRepository : IBlobRepository
+    public class BlobRepository
     {
         public BlobRepository(StorageService service)
 		{
