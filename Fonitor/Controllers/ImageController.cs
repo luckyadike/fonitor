@@ -42,7 +42,7 @@
 
             imageQueueRepository = queueRepository;
 		}
-        [HttpPost]
+
         [RequireAPIKeyAndSensorId]
         public void Reset()
         {
@@ -58,7 +58,6 @@
 		/// This entrypoint receives images from sensors.
 		/// </summary>
 		/// <returns>A HttpResponseMessage containing the operation status.</returns>
-        [HttpPost]
 		[RequireAPIKeyAndSensorId]
 		public Task<HttpResponseMessage> Upload()
 		{
