@@ -43,6 +43,16 @@
             imageQueueRepository = queueRepository;
 		}
 
+        [RequireAPIKeyAndSensorId]
+        public void Reset()
+        {
+            string apiKey;
+            string sensorId;
+            Constants.ExtractRequestIdentity(out apiKey, out sensorId);
+
+            imageBlobRepository.Delete(sensorId, "base");
+        }
+
 		// POST api/image/upload
 		/// <summary>
 		/// This entrypoint receives images from sensors.

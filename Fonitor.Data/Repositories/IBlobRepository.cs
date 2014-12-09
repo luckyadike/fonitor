@@ -12,6 +12,8 @@
 
         void AddOrReplace(Stream entity, string container, string key);
 
+        void Delete(string container, string key);
+
         Stream RetrieveAsStream(string container, string key);
     }
 }
