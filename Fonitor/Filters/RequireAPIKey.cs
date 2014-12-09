@@ -11,7 +11,7 @@
 
 	public class RequireAPIKey : AuthorizationFilterAttribute
 	{
-		private TableRepository<User> userRepository { get; set; }
+		private ITableRepository<User> userRepository { get; set; }
 
 		public RequireAPIKey()
 		{
