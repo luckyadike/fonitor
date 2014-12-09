@@ -21,7 +21,7 @@
 		{
 			entity.Seek(0, SeekOrigin.Begin);
 
-			GetContainerReference(container);
+			GetReference(container);
 
 			var blob = reference.GetBlockBlobReference(key);
 			if (!blob.Exists())
@@ -36,44 +36,40 @@
         {
 			entity.Seek(0, SeekOrigin.Begin);
 
-            GetContainerReference(container);
+            GetReference(container);
 
             reference.GetBlockBlobReference(key).UploadFromStream(entity);
         }
 
 		public CloudBlockBlob RetrieveAsBlob(string container, string key)
 		{
-			GetContainerReference(container);
+			GetReference(container);
 
 			return reference.GetBlockBlobReference(key);
 		}
 
         public Stream RetrieveAsStream(string container, string key)
         {
-            GetContainerReference(container);
+            GetReference(container);
 
             var blob = reference.GetBlockBlobReference(key);
             if (blob.Exists())
             {
-                using (var result = new MemoryStream())
-                {
-                    blob.DownloadToStream(result);
+                var result = new MemoryStream();
 
-                    return result;
-                }         
+                blob.DownloadToStream(result);
+
+                return result;
             }
 
             return null;
         }
 
-        private void GetContainerReference(string container, bool shouldCreate = true)
+        private void GetReference(string key)
         {
-            reference = client.GetContainerReference(container);
+            client.GetContainerReference(key).CreateIfNotExists();
 
-            if (shouldCreate)
-            {
-                reference.CreateIfNotExists();
-            }
+            reference = client.GetContainerReference(key);
         }
 
         private CloudBlobClient client;

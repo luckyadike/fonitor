@@ -6,13 +6,11 @@
     using Fonitor.Data.Services;
     using Fonitor.Notification;
     using Microsoft.Azure.WebJobs;
-    using Microsoft.WindowsAzure.Storage.Blob;
-    using Newtonsoft.Json;
     using System;
     using System.Configuration;
     using System.Drawing;
     using System.Linq;
-    using XnaFan.ImageComparison;
+	using XnaFan.ImageComparison;
 
     public class Program
     {
@@ -85,35 +83,26 @@
 			var baseImgKey = "base";
 
 			var baseImage = imageRepository.RetrieveAsStream(sensorId, baseImgKey);
-            if (baseImage == null)
-            {
-                // Set the base item.
-                imageRepository.Add(inputStream, sensorId, baseImgKey);
-            }
-            else
-            {
-                var threshold = int.Parse(ConfigurationManager.AppSettings["MaxImageDivergencePercent"]);
+			if (baseImage == null)
+			{
+				// Set the base item.
+				imageRepository.Add(inputStream, sensorId, baseImgKey);
+			}
+			else
+			{
+				var threshold = int.Parse(ConfigurationManager.AppSettings["MaxImageDivergencePercent"]);
 
-                // Compare this to the new image.
-                var diff = ImageComparison.PercentageDifference(Image.FromStream(inputStream), Image.FromStream(baseImage)) * 100;
-                if (diff > threshold)
-                {
-                    // Images are different.
-                    // Add this image to the notification queue.
+				// Compare this to the new image.
+				var diff = ImageComparison.PercentageDifference(Image.FromStream(inputStream), Image.FromStream(baseImage)) * 100;
+				if (diff > threshold)
+				{
+					// Images are different.
+					// Add this image to the notification queue.
+					notification = input;
+				}
+			}
 
-                    notification = JsonConvert.SerializeObject(new NotificationQueueItem
-                    {
-                        Container = sensorId,
-                        Key = input
-                    });
-                }
-            }
-
-            // Move this image to a sensor specific table.
-			imageRepository.Add(inputStream, sensorId, input);
-            
-            // Delete the image from the global image repo.
-            imageBlob.Delete(DeleteSnapshotsOption.None);
+			imageRepository.Add(inputStream, sensorId, UniqueString());
 		}
 
 		/// <summary>
@@ -121,10 +110,10 @@
 		/// </summary>
 		/// <param name="input">The queue item representing the event.</param>
 		public static void SendNotification(
-			[QueueTrigger("notification")] NotificationQueueItem input)
+			[QueueTrigger("notification")] string input)
 		{
 			// Get the real image.
-			var imageBlob = imageRepository.RetrieveAsBlob(input.Container, input.Key);
+			var imageBlob = imageRepository.RetrieveAsBlob("image", input);
 			if (!imageBlob.Exists())
 			{
 				Console.WriteLine("Could not retrieve image with key {0} from image container.", input);
