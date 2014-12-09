@@ -23,6 +23,8 @@ namespace Fonitor.SimpleClient
         MediaCapture captureManager;
         DeviceInformationCollection devices;
 
+        bool runTask = false;
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -77,15 +79,48 @@ namespace Fonitor.SimpleClient
             }
         }
 
+        private async void resetSensorClick_Click(object sender, RoutedEventArgs e)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("X-ApiKey", apiKey.Text.Trim());
+
+                client.DefaultRequestHeaders.Add("X-SensorId", sensorId.Text.Trim());
+
+                var endpoint = new Uri("https://fonitor.azurewebsites.net/api/image/reset");
+
+                var response = await client.PostAsync(endpoint, null);
+
+                apiKey.Text = response.ReasonPhrase;
+                sensorId.Text = response.Source.ToString();
+            }
+        }
+
+        private void stopSensorClick_Click(object sender, RoutedEventArgs e)
+        {
+            runTask = false;
+        }
+
         private async void startSensorClick_Click(object sender, RoutedEventArgs e)
         {
-            var encodingProperties = ImageEncodingProperties.CreateJpeg();
+            runTask = true;
 
-            using (var imageStream = new InMemoryRandomAccessStream())
+            while (runTask)
             {
-                await captureManager.CapturePhotoToStreamAsync(encodingProperties, imageStream);
+                if (periodComboBox.SelectedIndex == 0)
+                    break;
 
-                await UploadAsync(imageStream);
+                var time = TimeSpan.FromSeconds(int.Parse(periodComboBox.SelectionBoxItem.ToString()));
+                await Task.Delay(time);
+
+                var encodingProperties = ImageEncodingProperties.CreateJpeg();
+
+                using (var imageStream = new InMemoryRandomAccessStream())
+                {
+                    await captureManager.CapturePhotoToStreamAsync(encodingProperties, imageStream);
+
+                    await UploadAsync(imageStream);
+                }
             }
         }
 
@@ -112,7 +147,6 @@ namespace Fonitor.SimpleClient
                     apiKey.Text = response.ReasonPhrase;
                     sensorId.Text = response.Source.ToString();
                 }
-
             }
         }
     }

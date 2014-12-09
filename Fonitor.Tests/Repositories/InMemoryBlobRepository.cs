@@ -29,6 +29,11 @@
             throw new NotImplementedException();
         }
 
+        public void Delete(string container, string key)
+        {
+            throw new NotImplementedException();
+        }
+
         public Stream RetrieveAsStream(string container, string key)
         {
             return Store[container + key];
