@@ -90,9 +90,6 @@ namespace Fonitor.SimpleClient
                 var endpoint = new Uri("https://fonitor.azurewebsites.net/api/image/reset");
 
                 var response = await client.PostAsync(endpoint, null);
-
-                apiKey.Text = response.ReasonPhrase;
-                sensorId.Text = response.Source.ToString();
             }
         }
 
@@ -143,9 +140,6 @@ namespace Fonitor.SimpleClient
                     content.Add(new HttpStreamContent(stream));
 
                     var response = await client.PostAsync(endpoint, content);
-
-                    apiKey.Text = response.ReasonPhrase;
-                    sensorId.Text = response.Source.ToString();
                 }
             }
         }

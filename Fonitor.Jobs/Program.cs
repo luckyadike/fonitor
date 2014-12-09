@@ -80,12 +80,20 @@
 
 			var sensorId = imageBlob.Metadata[Program.SensorIdString];
 
+            if (!imageBlob.Metadata.ContainsKey(Program.ApiKeyString))
+            {
+                Console.WriteLine("ApiKey is missing from the metadata.");
+                return;
+            }
+
+            var apiKey = imageBlob.Metadata[Program.ApiKeyString];
+
 			var inputStream = imageBlob.ExtractStream();
 
 			var baseImgKey = "base";
 
 			var baseImage = imageRepository.RetrieveAsStream(sensorId, baseImgKey);
-            if (baseImage == null)
+            if (baseImage.Length == 0)
             {
                 // Set the base item.
                 imageRepository.Add(inputStream, sensorId, baseImgKey);
@@ -104,7 +112,8 @@
                     notification = JsonConvert.SerializeObject(new NotificationQueueItem
                     {
                         Container = sensorId,
-                        Key = input
+                        Key = input,
+                        ApiKey = apiKey
                     });
                 }
             }
@@ -131,19 +140,8 @@
 				return;
 			}
 
-			// Get metadata.
-			imageBlob.FetchAttributes();
-
-			if (!imageBlob.Metadata.ContainsKey(Program.ApiKeyString))
-			{
-				Console.WriteLine("ApiKey is missing from the metadata.");
-				return;
-			}
-
-			var key = imageBlob.Metadata[Program.ApiKeyString];
-
 			// Get the email address for the user.
-			var user = userRepository.RetrievePartition(key);
+			var user = userRepository.RetrievePartition(input.ApiKey);
 			if (user == null || user.Count() == 0)
 			{
 				Console.WriteLine("No data found for the user.");
@@ -153,10 +151,8 @@
 			// Consider caching this stream?
             var inputStream = imageBlob.ExtractStream();
 
-			var sensorId = imageBlob.Metadata[Program.SensorIdString];
-
 			// Get the sensor details.
-			var sensor = sensorRepository.RetrievePartition(sensorId);
+			var sensor = sensorRepository.RetrievePartition(input.Container);
 			if (sensor == null || sensor.Count() == 0)
 			{
 				Console.WriteLine("No data found for the sensor.");

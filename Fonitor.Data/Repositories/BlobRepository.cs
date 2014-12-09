@@ -57,18 +57,14 @@
         {
             GetContainerReference(container);
 
+            var result = new MemoryStream();
             var blob = reference.GetBlockBlobReference(key);
             if (blob.Exists())
             {
-                using (var result = new MemoryStream())
-                {
-                    blob.DownloadToStream(result);
-
-                    return result;
-                }         
+                blob.DownloadToStream(result);
             }
 
-            return null;
+            return result;
         }
 
         private void GetContainerReference(string container, bool shouldCreate = true)
