@@ -3,7 +3,7 @@
 	using Fonitor.Data.Services;
 	using Microsoft.WindowsAzure.Storage.Queue;
 
-    public class QueueRepository : IQueueRepository
+    public class QueueRepository
 	{
 		public QueueRepository(StorageService service)
 		{

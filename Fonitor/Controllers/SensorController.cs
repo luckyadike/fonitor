@@ -14,7 +14,7 @@
     /// </summary>
 	public class SensorController : ApiController
 	{
-		private ITableRepository<Sensor> sensorRepository { get; set; }
+		private TableRepository<Sensor> sensorRepository { get; set; }
 
         /// <summary>
         /// Default Constructor.
@@ -28,7 +28,7 @@
         /// Constructor with repository parameter.
         /// </summary>
         /// <param name="repository">The data repository to use.</param>
-		public SensorController(ITableRepository<Sensor> repository)
+		public SensorController(TableRepository<Sensor> repository)
 		{
 			sensorRepository = repository;
 		}

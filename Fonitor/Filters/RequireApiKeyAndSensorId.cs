@@ -11,9 +11,9 @@
 
 	public class RequireAPIKeyAndSensorId : AuthorizationFilterAttribute
 	{
-		private ITableRepository<User> userRepository { get; set; }
+		private TableRepository<User> userRepository { get; set; }
 
-		private ITableRepository<Sensor> sensorRepository { get; set; }
+		private TableRepository<Sensor> sensorRepository { get; set; }
 
 		public RequireAPIKeyAndSensorId()
 		{

@@ -14,7 +14,7 @@
     /// </summary>
 	public class UserController : ApiController
 	{
-		private ITableRepository<Fonitor.Data.Models.User> userRepository { get; set; }
+		private TableRepository<Fonitor.Data.Models.User> userRepository { get; set; }
 
         /// <summary>
         /// Default Constructor.
@@ -28,7 +28,7 @@
         /// Constructor with repository parameter.
         /// </summary>
         /// <param name="repository">The data repository to use.</param>
-		public UserController(ITableRepository<Fonitor.Data.Models.User> repository)
+		public UserController(TableRepository<Fonitor.Data.Models.User> repository)
 		{
 			userRepository = repository;
 		}
