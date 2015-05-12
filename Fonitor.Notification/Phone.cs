@@ -47,7 +47,7 @@
             var result = client.SendMessage(
                 senderPhone,
                 recipientPhoneNumber,
-                message, new string[] { imgUrl });
+                message /*, new string[] { imgUrl }*/ );
 
             if (result.RestException != null)
             {
