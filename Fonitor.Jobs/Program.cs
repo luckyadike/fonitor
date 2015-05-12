@@ -160,8 +160,11 @@
 			}
 
 			// Send an email.
-			// Send a text? (Base this on the user's settings)
 			Email.SendImageChangeNotification(user.First().EmailAddress, sensor.First().Name, inputStream);
+
+            // Send a text.
+            // Text or email or both? Give the user an option?
+            Phone.SendImageChangeNotification(user.First().PhoneNumber, sensor.First().Name, inputStream);
 		}
     }
 }

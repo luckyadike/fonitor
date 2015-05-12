@@ -7,7 +7,7 @@
 
     public class Phone
     {
-        public static string SaveStreamToTempImage(MemoryStream imgStream)
+        static string SaveStreamToTempImage(MemoryStream imgStream)
         {
             try
             {
